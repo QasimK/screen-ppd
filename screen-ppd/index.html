@@ -6,14 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <script src="jquery-2.1.3.min.js"></script>
+    <script src="screen-ppd.js"></script>
     <title>Screen PPD calculator</title>
   </head>
   <body>
     <header>
-      <h1>Screen PPD calculator</h1>
+      <h1>Screen PPD Calculator</h1>
       <p>
         This will allow you to calculate the Pixels Per Degree (PPD)
-        you will see from a screen given its size/resolution and, importantly,
+        you will see from a screen given its size & resolution and, importantly,
         the distance the screen is placed. Additionally, you can set a
         scaling factor that you may be using with the OS.
       </p>
@@ -21,64 +22,66 @@
     
     <section>
       <h2>Calculator</h2>
-      <form oninput="distance_value.value = distance.valueAsNumber;">
+      <form>
         <fieldset>
           <legend>Measurement Units</legend>
-          <input name="units" id="imperial" type="radio" value="imperial" checked/>
+          <input name="units" id="imperial" class="userin" type="radio" value="imperial" checked/>
           <label for="imperial">Imperial</label>
-          <input name="units" id="metric" type="radio" value="metric"/>
+          <input name="units" id="metric" class="userin" type="radio" value="metric"/>
           <label for="metric">Metric</label>
         </fieldset>
         
         <fieldset>
-          <legend>Enter screen information</legend>
+          <legend>Enter Screen Information</legend>
           <p>
             <label for="diagonal-size">Diagonal Size</label>
-            <input id="diagonal-size" name="diagonal-size" type="number"
+            <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
               value="" min="1" required autofocus/>
+            <span class="units-text">inches</span>
           </p>
           <p>
             <label for="resolution-width">Resolution</label>
-            <input id="resolution-width" name="resolution-width" type="number"
-              value="" min="1" step="1" required/>
+            <input id="resolution-width" name="resolution-width" class="userin"
+              type="number" value="" min="1" step="1" required/>
             <label for="resolution-height">x</label>
-            <input id="resolution-height" name="resolution-height" type="number"
-              value="" min="1" step="1" required/>
+            <input id="resolution-height" name="resolution-height" class="userin"
+              type="number" value="" min="1" step="1" required/>
           </p>
           <p>
             <label for="distance">Viewing Distance</label>
-            <input id="distance" name="distance" type="range"
-              value="25" min="1" max="100" step="1"/>
-            (<output name="distance_value" id="distance_value" for="distance">25</output>)
+            <input id="distance" name="distance" class="userin rangein" type="range"
+              value="25" min="1" max="120"/>
+            (<output name="distance_value" id="distance_value" for="distance">-</output>
+            <span class="units-text">inches</span>)
           </p>
           
           <fieldset>
             <legend>Scaling</legend>
-            <input name="scaling" id="scale-100" type="radio" value="100" checked/>
+            <input name="scaling" id="scale-100" class="userin" type="radio" value="100" checked/>
             <label for="scale-100">100%</label>
-            <input name="scaling" id="scale-125" type="radio" value="125"/>
+            <input name="scaling" id="scale-125" class="userin" type="radio" value="125"/>
             <label for="scale-125">125%</label>
-            <input name="scaling" id="scale-150" type="radio" value="150"/>
+            <input name="scaling" id="scale-150" class="userin" type="radio" value="150"/>
             <label for="scale-150">150%</label>
-            <input name="scaling" id="scale-200" type="radio" value="200"/>
+            <input name="scaling" id="scale-200" class="userin" type="radio" value="200"/>
             <label for="scale-200">200%</label>
           </fieldset>
         </fieldset>
         
         <fieldset>
-          <legend>Pixels per degree</legend>
+          <legend>Pixels Per Degree</legend>
           <p>
             <label for="ppd">PPD:</label>
             <output name="ppd" id="ppd">-</output>
           </p>
           <p>
-            <label for="horizontal-fov">Horizontal viewing angle:</label>
-            <output name="horizontal-fov" id="horizontal-fov">-</output>
+            <label for="horizontal-fov">Horizontal FOV:</label>
+            <output name="horizontal-fov" id="horizontal-fov">-</output>&#176;
           </p>
         </fieldset>
         
         <fieldset id="additional-info">
-          <legend>Additional information</legend>
+          <legend>Additional Information</legend>
           <p>
             <label for="aspect-ratio">Aspect ratio:</label>
             <output name="aspect-ratio" id="aspect-ratio">-</output>
@@ -86,14 +89,15 @@
           <p>
             <label for="monitor-size">Monitor size:</label>
             <output name="monitor-size" id="monitor-size">-</output>
+            <span class="units-text">inches</span>
           </p>
           <p>
-            <label for="ppi">PPI:</label>
-            <output name="ppi" id="ppi">-</output>
+            <label for="ppu">PPI:</label>
+            <output name="ppu" id="ppu">-</output>
           </p>
           <p>
-            <label for="scaled-ppi">Scaled PPI:</label>
-            <output name="scaled-ppi" id="scaled-ppi">-</output>
+            <label for="scaled-ppu">Scaled PPI:</label>
+            <output name="scaled-ppu" id="scaled-ppu">-</output>
           </p>
           <p>
             <label for="scaled-resolution">Scaled Resolution:</label>
