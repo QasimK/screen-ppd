@@ -2,50 +2,118 @@
 
 $(document).ready(function() {
   // Set viewing distance value
+  var prevDistanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
+  changeDistanceUnits();
   updateDistanceNumber();
-  updateUnitsText();
+  updateDiagonalUnitsText();
   
-  $('.userin').change(circuit);
-  $("input:radio[name='units']").change(changeUnits);
+  $("input:radio[name='diagonal-units']").change(changeDiagonalUnits);
+  $("input:radio[name='distance-units']").change(changeDistanceUnits);
   $('#distance').on("input", updateDistanceNumber); // Update as your drag mouse
+  $('.userin').change(circuit);
 
   function updateDistanceNumber() {
     $('#distance_value').val($('#distance').val());
     circuit();
   }
   
-  function changeUnits() {
-    // Convert units from imperial to metric and vica versa.
-    // Only triggered on an actual change.
-    var units = $("input[type='radio'][name='units']:checked").val();
-    if(units == "metric") {
-      var SF = 2.54;
-    } else {
-      var SF = 1 / 2.54;
+  function changeDiagonalUnits() {
+    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
+    if(diagonalUnits == "cm") {
+      var DSF = 2.54;
     }
-    
+    else { //inches
+      var DSF = 1 / 2.54;
+    }
+
     // Update diagonal length
-    var newDiagonalLength = Math.round(SF * parseInt($('#diagonal-size').val(), 10));
+    var newDiagonalLength = Math.round(DSF * parseInt($('#diagonal-size').val(), 10));
     $('#diagonal-size').val(newDiagonalLength);
     
-    // Update viewing distance
-    var oldDistance = parseInt($('#distance').val(), 10);
-    var newDistance = SF * oldDistance;
-    $('#distance').val(newDistance);
-    updateDistanceNumber();
-    
-    // Update text
-    updateUnitsText()
+    updateDiagonalUnitsText()
   }
   
-  function updateUnitsText() {
-    var units = $("input[type='radio'][name='units']:checked").val();
-    if(units == "metric") {
-      $(".units-text").text("cm");
+  function changeDistanceUnits() {
+    var distanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
+    var DSF;
+    if (prevDistanceUnits == "inches" && distanceUnits == "cm") {
+      DSF = 2.54;
+    }
+    else if (prevDistanceUnits == "cm" && distanceUnits == "inches") {
+      DSF = 0.393700;
+    }
+    else if (prevDistanceUnits == "inches" && distanceUnits == "feet") {
+      DSF = 0.083333; //1 / 12;
+    }
+    else if (prevDistanceUnits == "feet" && distanceUnits == "inches") {
+      DSF = 12;
+    }
+    else if (prevDistanceUnits == "inches" && distanceUnits == "m") {
+      DSF = 0.0254; //2.54 / 100;
+    }
+    else if (prevDistanceUnits == "m" && distanceUnits == "inches") {
+      DSF = 39.37;
+    }
+    else if (prevDistanceUnits == "cm" && distanceUnits == "feet") {
+      DSF = 0.032808; //1 / 30.48;
+    }
+    else if (prevDistanceUnits == "feet" && distanceUnits == "cm") {
+      DSF = 30.48;
+    }
+    else if (prevDistanceUnits == "cm" && distanceUnits == "m") {
+      DSF = 0.01; //1 / 100;
+    }
+    else if (prevDistanceUnits == "m" && distanceUnits == "cm") {
+      DSF = 100;
+    }
+    else if (prevDistanceUnits == "feet" && distanceUnits == "m") {
+      DSF = 0.3048; //30.48 / 100;
+    }
+    else if (prevDistanceUnits == "m" && distanceUnits == "feet") {
+      DSF = 0.3048; //30.48 / 100;
+    }
+    else if (prevDistanceUnits == distanceUnits) {
+      DSF = 1;
+    }
+    else {
+      alert("Bug - unknown distance units");
+    }
+    
+    var maxSize, stepSize = 1;
+    if (distanceUnits === "inches") {
+      maxSize = 100;
+    }
+    else if (distanceUnits === "cm") {
+      maxSize = 250;
+    }
+    else if (distanceUnits === "feet") {
+      maxSize = 30;
+    }
+    else if (distanceUnits === "m") {
+      maxSize = 10;
+      stepSize = 0.1;
+    }
+    
+    prevDistanceUnits = distanceUnits;
+    
+    // Update diagonal length
+    var oldDistance = parseFloat($('#distance').val(), 10);
+    var newDistance = stepSize * Math.round(DSF * (1 / stepSize) * oldDistance);
+    $('#distance').attr("max", maxSize);
+    $('#distance').attr("step", stepSize);
+    $('#distance').val(newDistance);
+    
+    updateDistanceNumber();
+  }
+  
+  function updateDiagonalUnitsText() {
+    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
+    if(diagonalUnits == "cm") {
+      $("#monitor-size-units").text("cm");
       $("label[for='ppu']").text("PPCM:");
       $("label[for='scaled-ppu']").text("Scaled PPCM:");
     } else {
-      $(".units-text").text("inches");
+      $("#monitor-size-units").text("inches");
       $("label[for='ppu']").text("PPI:");
       $("label[for='scaled-ppu']").text("Scaled PPI:");
     }
@@ -65,31 +133,43 @@ $(document).ready(function() {
       distance: 101.6, //40 inches in metric
       scaling: 2 //200% scaling
     }*/
-    var units = $("input[type='radio'][name='units']:checked").val();
-    var SF = 1;
-    if (units == "imperial") {
-      SF = 2.54;
+    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
+    var DSF = 1; //Assume cm
+    if (diagonalUnits == "inches") {
+      DSF = 2.54;
+    }
+    
+    var distanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
+    var diagSF = 1; //Assume cm
+    if (distanceUnits == "inches") {
+      diagSF = 2.54;
+    }
+    else if (distanceUnits == "feet") {
+      diagSF = 30.48;
+    }
+    else if (distanceUnits == "m") {
+      diagSF = 100;
     }
     
     var diagonalLength = parseInt($('#diagonal-size').val(), 10);
     var resW = parseInt($('#resolution-width').val(), 10);
     var resH = parseInt($('#resolution-height').val(), 10);
-    var distance = parseInt($('#distance').val(), 10);
+    var distance = parseFloat($('#distance').val(), 10);
     
     var scaling = $("input[type='radio'][name='scaling']:checked").val();
     scaling = parseInt(scaling, 10) / 100;
     
     return {
-      diagonalLength: SF * diagonalLength,
+      diagonalLength: DSF * diagonalLength,
       resW: resW,
       resH: resH,
-      distance: SF * distance,
+      distance: diagSF * distance,
       scaling: scaling
     }
   }
   
   function getCalculations(info) {
-    /* Take in info = {
+    /* Take in info = { // in metric form
       diagonalLength: ,
       resW: ,
       resH: ,
@@ -112,10 +192,10 @@ $(document).ready(function() {
       scaledPPCM: 
     }*/
     
-    var aspectRatio = info.resW / info.resH;
-    // TODO: Proper aspect ratio calculation
-    var aspectRatioW = 0;
-    var aspectRatioH = 0;
+    var ratioInfo = getAspectRatio(info.resW, info.resH);
+    var aspectRatio = ratioInfo.ratio;
+    var aspectRatioW = ratioInfo.ratioHor;
+    var aspectRatioH = ratioInfo.ratioVer;
     
     // Scaled resolution
     var scaledResW = info.resW / info.scaling;
@@ -148,20 +228,20 @@ $(document).ready(function() {
   
   function setOutput(calcs) {
     // Set output in the appropriate units (takes in calcs from getCalculations)
-    var units = $("input[type='radio'][name='units']:checked").val();
-    var SF = 1;
-    if(units == "imperial") {
-      SF = 1 / 2.54;
+    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
+    var DSF = 1; // Assume CM
+    if(diagonalUnits == "inches") {
+      DSF = 1 / 2.54;
     }
     
     var PPD = Math.round(calcs.PPD);
     var horizontalFOV = Math.round(calcs.horizontalFOV);
-    // TODO: Add aspect ratio as easy to read 16:9
-    var aspectRatio = Math.round(calcs.aspectRatio * 1000) / 1000;
-    var monitorSize = Math.round(SF * calcs.lengthW * 10) / 10 + " by " +
-                        Math.round(SF * calcs.lengthH * 10) / 10;
-    var PPU = Math.round((1 / SF) * calcs.PPCM);
-    var scaledPPU = Math.round((1 / SF) * calcs.scaledPPCM);
+    var aspectRatio = calcs.aspectRatioW + ":" + calcs.aspectRatioH + " (" + 
+                      Math.round(calcs.aspectRatio * 1000) / 1000 + ")";
+    var monitorSize = Math.round(DSF * calcs.lengthW * 10) / 10 + " by " +
+                        Math.round(DSF * calcs.lengthH * 10) / 10;
+    var PPU = Math.round((1 / DSF) * calcs.PPCM);
+    var scaledPPU = Math.round((1 / DSF) * calcs.scaledPPCM);
     var scaledResolution = Math.round(calcs.scaledResW) + " x " +
                             Math.round(calcs.scaledResH);
     
@@ -172,5 +252,46 @@ $(document).ready(function() {
     $('#ppu').text(PPU);
     $('#scaled-ppu').text(scaledPPU);
     $('#scaled-resolution').text(scaledResolution);
+  }
+  
+  function getAspectRatio(width, height) {
+    var theGCD = gcd(width, height);
+    var ratioHor = width / theGCD;
+    var ratioVer = height / theGCD;
+    
+    //1366 x 768
+    if(ratioHor === 683 && ratioVer === 384) {
+      ratioHor = 16;
+      ratioVer = 9;
+    }
+    //2560 x 1080
+    if(ratioHor === 64 && ratioVer === 27) {
+      ratioHor = 21;
+      ratioVer = 9;
+    }
+    //3440 x 1440
+    if(ratioHor === 43 && ratioVer === 18) {
+      ratioHor = 21;
+      ratioVer = 9;
+    }
+    //Change 8:5 to 16:10
+    if(ratioHor === 8 && ratioVer === 5) {
+      ratioHor = 16;
+      ratioVer = 10;
+    }
+    
+    return {
+      ratio: width / height,
+      ratioHor: ratioHor,
+      ratioVer: ratioVer
+    }
+  }
+  
+  function gcd(a, b) {
+    // Not fastest algorithm but good enough
+    if(!b) {
+      return a;
+    }
+    return gcd(b, a % b);
   }
 });

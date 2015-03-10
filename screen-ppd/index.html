@@ -24,20 +24,19 @@
       <h2>Calculator</h2>
       <form>
         <fieldset>
-          <legend>Measurement Units</legend>
-          <input name="units" id="imperial" class="userin" type="radio" value="imperial" checked/>
-          <label for="imperial">Imperial</label>
-          <input name="units" id="metric" class="userin" type="radio" value="metric"/>
-          <label for="metric">Metric</label>
-        </fieldset>
-        
-        <fieldset>
           <legend>Enter Screen Information</legend>
           <p>
             <label for="diagonal-size">Diagonal Size</label>
             <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
-              value="" min="1" required autofocus/>
-            <span class="units-text">inches</span>
+                   value="" min="1" required autofocus/>
+            
+            <input name="diagonal-units" id="diagonal-inches" class="userin"
+                   type="radio" value="inches" checked/>
+            <label for="diagonal-inches">inches</label>
+            
+            <input name="diagonal-units" id="diagonal-cm" class="userin"
+                   type="radio" value="cm"/>
+            <label for="diagonal-cm">cm</label>
           </p>
           <p>
             <label for="resolution-width">Resolution</label>
@@ -51,8 +50,20 @@
             <label for="distance">Viewing Distance</label>
             <input id="distance" name="distance" class="userin rangein" type="range"
               value="25" min="1" max="120"/>
-            (<output name="distance_value" id="distance_value" for="distance">-</output>
-            <span class="units-text">inches</span>)
+            <output name="distance_value" id="distance_value" for="distance">-</output>
+            
+            <input name="distance-units" id="distance-cm" class="userin"
+                   type="radio" value="cm" checked/>
+            <label for="distance-cm">cm</label>
+            <input name="distance-units" id="distance-inches" class="userin"
+                   type="radio" value="inches"/>
+            <label for="distance-inches">inches</label>
+            <input name="distance-units" id="distance-feet" class="userin"
+                   type="radio" value="feet"/>
+            <label for="distance-feet">feet</label>
+            <input name="distance-units" id="distance-m" class="userin"
+                   type="radio" value="m"/>
+            <label for="distance-m">m</label>
           </p>
           
           <fieldset>
@@ -89,7 +100,7 @@
           <p>
             <label for="monitor-size">Monitor size:</label>
             <output name="monitor-size" id="monitor-size">-</output>
-            <span class="units-text">inches</span>
+            <span id="monitor-size-units" class="units-text">inches</span>
           </p>
           <p>
             <label for="ppu">PPI:</label>
