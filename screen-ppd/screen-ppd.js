@@ -1,40 +1,78 @@
-﻿"use strict";
+"use strict";
 
 $(document).ready(function() {
-  // Set viewing distance value
-  var prevDistanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
-  changeDistanceUnits();
-  updateDistanceNumber();
-  updateDiagonalUnitsText();
-  
-  $("input:radio[name='diagonal-units']").change(changeDiagonalUnits);
-  $("input:radio[name='distance-units']").change(changeDistanceUnits);
-  $('#distance').on("input", updateDistanceNumber); // Update as your drag mouse
-  $('.userin').change(circuit);
+  window.ppdCalc.initialise();
+});
 
-  function updateDistanceNumber() {
-    $('#distance_value').val($('#distance').val());
-    circuit();
-  }
+
+// Interface
+(function( ppd, $, undefined ) {
+  // Private
+  var form;
+  var prevDistanceUnits;
   
-  function changeDiagonalUnits() {
-    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
-    if(diagonalUnits == "cm") {
+  
+  function onDiagonalUnitsChange() {
+    var diagonalUnits = form.diagonalActiveUnit().val();
+    
+    // Update diagonal length
+    if (diagonalUnits === "cm") {
       var DSF = 2.54;
     }
     else { //inches
       var DSF = 1 / 2.54;
     }
-
-    // Update diagonal length
-    var newDiagonalLength = Math.round(DSF * parseInt($('#diagonal-size').val(), 10));
-    $('#diagonal-size').val(newDiagonalLength);
+    var newLength = Math.round(DSF * parseInt(form.diagonalLength.val(), 10));
+    form.diagonalLength.val(newLength);
     
-    updateDiagonalUnitsText()
+    // Update text
+    if(diagonalUnits === "cm") {
+      $("#monitor-size-units").text("cm");
+      $("label[for='ppu']").text("PPCM:");
+      $("label[for='scaled-ppu']").text("Scaled PPCM:");
+    } else {
+      $("#monitor-size-units").text("inches");
+      $("label[for='ppu']").text("PPI:");
+      $("label[for='scaled-ppu']").text("Scaled PPI:");
+    }
+    
+    updateDiagonalButtons();
   }
   
-  function changeDistanceUnits() {
-    var distanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
+  function onDistanceUnitsChange() {
+    updateDistanceSlider();
+    updateDistanceButtons();
+    updateDistanceText();
+  }
+  
+  
+  function _selectButton(buttonsList, activeInput) {
+    var currentSelectedValue = activeInput.val();
+    buttonsList.each( function() {
+      var correspondingInput = $("#" + $(this).attr('for'));
+      if (correspondingInput.val() === currentSelectedValue) {
+        $(this).removeClass("secondary");
+      }
+      else {
+        $(this).addClass("secondary");
+      }
+    });
+  }
+  
+  function updateDiagonalButtons() {
+    _selectButton(form.diagonalButtons, form.diagonalActiveUnit());
+  }
+  
+  function updateDistanceButtons() {
+    _selectButton(form.distanceButtons, form.distanceActiveUnit());
+  }
+  
+  function updateScalingButtons() {
+    _selectButton(form.scalingButtons, form.scalingActiveInput());
+  }
+  
+  function updateDistanceSlider() {
+    var distanceUnits = form.distanceActiveUnit().val();
     var DSF;
     if (prevDistanceUnits == "inches" && distanceUnits == "cm") {
       DSF = 2.54;
@@ -70,7 +108,7 @@ $(document).ready(function() {
       DSF = 0.3048; //30.48 / 100;
     }
     else if (prevDistanceUnits == "m" && distanceUnits == "feet") {
-      DSF = 0.3048; //30.48 / 100;
+      DSF = 3.280839;
     }
     else if (prevDistanceUnits == distanceUnits) {
       DSF = 1;
@@ -97,32 +135,17 @@ $(document).ready(function() {
     prevDistanceUnits = distanceUnits;
     
     // Update diagonal length
-    var oldDistance = parseFloat($('#distance').val(), 10);
+    var oldDistance = parseFloat(form.distance.val(), 10);
     var newDistance = stepSize * Math.round(DSF * (1 / stepSize) * oldDistance);
-    $('#distance').attr("max", maxSize);
-    $('#distance').attr("step", stepSize);
-    $('#distance').val(newDistance);
     
-    updateDistanceNumber();
+    form.distance.attr("max", maxSize).attr("step", stepSize).val(newDistance);
   }
   
-  function updateDiagonalUnitsText() {
-    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
-    if(diagonalUnits == "cm") {
-      $("#monitor-size-units").text("cm");
-      $("label[for='ppu']").text("PPCM:");
-      $("label[for='scaled-ppu']").text("Scaled PPCM:");
-    } else {
-      $("#monitor-size-units").text("inches");
-      $("label[for='ppu']").text("PPI:");
-      $("label[for='scaled-ppu']").text("Scaled PPI:");
-    }
+  function updateDistanceText() {
+    form.distanceNumberText.val(form.distance.val());
+    form.distanceUnitsText.val(form.distanceActiveUnit().val());
   }
   
-  function circuit() {
-    //Do the complete circuit;
-    setOutput(getCalculations(getInput()));
-  }
   
   function getInput() {
     // Return input as metric measurements
@@ -133,13 +156,13 @@ $(document).ready(function() {
       distance: 101.6, //40 inches in metric
       scaling: 2 //200% scaling
     }*/
-    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
+    var diagonalUnits = form.diagonalActiveUnit().val();
     var DSF = 1; //Assume cm
     if (diagonalUnits == "inches") {
       DSF = 2.54;
     }
     
-    var distanceUnits = $("input[type='radio'][name='distance-units']:checked").val();
+    var distanceUnits = form.distanceActiveUnit().val();
     var diagSF = 1; //Assume cm
     if (distanceUnits == "inches") {
       diagSF = 2.54;
@@ -151,12 +174,12 @@ $(document).ready(function() {
       diagSF = 100;
     }
     
-    var diagonalLength = parseInt($('#diagonal-size').val(), 10);
-    var resW = parseInt($('#resolution-width').val(), 10);
-    var resH = parseInt($('#resolution-height').val(), 10);
-    var distance = parseFloat($('#distance').val(), 10);
+    var diagonalLength = parseInt(form.diagonalLength.val(), 10);
+    var resW = parseInt(form.resWidth.val(), 10);
+    var resH = parseInt(form.resHeight.val(), 10);
+    var distance = parseFloat(form.distance.val(), 10);
     
-    var scaling = $("input[type='radio'][name='scaling']:checked").val();
+    var scaling = form.scalingActiveInput().val();
     scaling = parseInt(scaling, 10) / 100;
     
     return {
@@ -168,7 +191,129 @@ $(document).ready(function() {
     }
   }
   
-  function getCalculations(info) {
+  function setOutput(calcs) {
+    // Set output in the appropriate units (takes in calcs from getCalculations)
+    var diagonalUnits = form.diagonalActiveUnit().val();
+    var DSF = 1; // Assume CM
+    if(diagonalUnits == "inches") {
+      DSF = 1 / 2.54;
+    }
+    
+    var PPD = Math.round(calcs.PPD);
+    var horizontalFOV = Math.round(calcs.horizontalFOV);
+    var aspectRatio = calcs.aspectRatioW + ":" + calcs.aspectRatioH + " (" + 
+                      Math.round(calcs.aspectRatio * 1000) / 1000 + ")";
+    var monitorSize = Math.round(DSF * calcs.lengthW * 10) / 10 + " by " +
+                        Math.round(DSF * calcs.lengthH * 10) / 10;
+    var PPU = Math.round((1 / DSF) * calcs.PPCM);
+    var scaledPPU = Math.round((1 / DSF) * calcs.scaledPPCM);
+    var scaledResolution = Math.round(calcs.scaledResW) + " x " +
+                            Math.round(calcs.scaledResH);
+    
+    $('#ppd').text(PPD);
+    $('#horizontal-fov').text(horizontalFOV);
+    $('#aspect-ratio').text(aspectRatio);
+    $('#monitor-size').text(monitorSize);
+    $('#ppu').text(PPU);
+    $('#scaled-ppu').text(scaledPPU);
+    $('#scaled-resolution').text(scaledResolution);
+  }
+  
+  
+  function circuit() {
+    setOutput(ppd.calculate(getInput()));
+  }
+  
+  // Public
+  // Note: you can move the functions into the update...Buttons function
+  // and create a static property
+  ppd.initialise = function() {
+    form = {
+      diagonalLength: $('#diagonal-size'),
+      diagonalUnits: $("input:radio[name='diagonal-units']"),
+      diagonalActiveUnit: function() {return $("input:radio[name='diagonal-units']:checked")},
+      diagonalButtons: $("label[for^='diagonal-units-']"),
+      resWidth: $('#resolution-width'),
+      resHeight: $('#resolution-height'),
+      distance: $('#distance'),
+      distanceNumberText: $('#distance-value'),
+      distanceUnitsText: $('#distance-units-text'),
+      distanceUnits: $("input[type='radio'][name='distance-units']"),
+      distanceActiveUnit: function() {return $("input[type='radio'][name='distance-units']:checked")},
+      distanceButtons: $("label[for^='distance-units-']"),
+      scalingInputs: $("input[type='radio'][name='scaling']"),
+      scalingActiveInput: function() {return $("input[type='radio'][name='scaling']:checked")},
+      scalingButtons: $("label[for^='scale-']")
+    }
+    
+    prevDistanceUnits = form.distanceActiveUnit().val()
+    
+    updateDiagonalButtons();
+    updateDistanceButtons();
+    updateScalingButtons();
+    updateDistanceText();
+    updateDistanceSlider();
+    circuit(); //Calculate PPD (may already be input on the form)
+    
+    form.diagonalUnits.change(onDiagonalUnitsChange);
+    form.distanceUnits.change(onDistanceUnitsChange);
+    form.scalingInputs.change(updateScalingButtons);
+    form.distance.on("input", updateDistanceText); // Update as mouse dragged
+    form.distance.on("input", circuit); // Do a complete calculation
+    $('.userin').change(circuit); //Any change on a user-input form element
+  }
+  
+}(window.ppdCalc = window.ppdCalc || {}, jQuery));
+
+
+
+// Logic
+(function(ppd, $, undefined) {
+  // Private
+  function getAspectRatio(width, height) {
+    var theGCD = gcd(width, height);
+    var ratioHor = width / theGCD;
+    var ratioVer = height / theGCD;
+    
+    //1366 x 768
+    if(ratioHor === 683 && ratioVer === 384) {
+      ratioHor = 16;
+      ratioVer = 9;
+    }
+    //2560 x 1080
+    if(ratioHor === 64 && ratioVer === 27) {
+      ratioHor = 21;
+      ratioVer = 9;
+    }
+    //3440 x 1440
+    if(ratioHor === 43 && ratioVer === 18) {
+      ratioHor = 21;
+      ratioVer = 9;
+    }
+    //Change 8:5 to 16:10
+    if(ratioHor === 8 && ratioVer === 5) {
+      ratioHor = 16;
+      ratioVer = 10;
+    }
+    
+    return {
+      ratio: width / height,
+      ratioHor: ratioHor,
+      ratioVer: ratioVer
+    }
+  }
+  
+  function gcd(a, b) {
+    // Not fastest algorithm but good enough
+    if(!b) {
+      return a;
+    }
+    return gcd(b, a % b);
+  }
+  
+  
+  // Public
+  ppd.calculate = function(info) {
     /* Take in info = { // in metric form
       diagonalLength: ,
       resW: ,
@@ -224,74 +369,5 @@ $(document).ready(function() {
       PPCM: PPCM,
       scaledPPCM: scaledPPCM
     }
-  }
-  
-  function setOutput(calcs) {
-    // Set output in the appropriate units (takes in calcs from getCalculations)
-    var diagonalUnits = $("input[type='radio'][name='diagonal-units']:checked").val();
-    var DSF = 1; // Assume CM
-    if(diagonalUnits == "inches") {
-      DSF = 1 / 2.54;
-    }
-    
-    var PPD = Math.round(calcs.PPD);
-    var horizontalFOV = Math.round(calcs.horizontalFOV);
-    var aspectRatio = calcs.aspectRatioW + ":" + calcs.aspectRatioH + " (" + 
-                      Math.round(calcs.aspectRatio * 1000) / 1000 + ")";
-    var monitorSize = Math.round(DSF * calcs.lengthW * 10) / 10 + " by " +
-                        Math.round(DSF * calcs.lengthH * 10) / 10;
-    var PPU = Math.round((1 / DSF) * calcs.PPCM);
-    var scaledPPU = Math.round((1 / DSF) * calcs.scaledPPCM);
-    var scaledResolution = Math.round(calcs.scaledResW) + " x " +
-                            Math.round(calcs.scaledResH);
-    
-    $('#ppd').text(PPD);
-    $('#horizontal-fov').text(horizontalFOV);
-    $('#aspect-ratio').text(aspectRatio);
-    $('#monitor-size').text(monitorSize);
-    $('#ppu').text(PPU);
-    $('#scaled-ppu').text(scaledPPU);
-    $('#scaled-resolution').text(scaledResolution);
-  }
-  
-  function getAspectRatio(width, height) {
-    var theGCD = gcd(width, height);
-    var ratioHor = width / theGCD;
-    var ratioVer = height / theGCD;
-    
-    //1366 x 768
-    if(ratioHor === 683 && ratioVer === 384) {
-      ratioHor = 16;
-      ratioVer = 9;
-    }
-    //2560 x 1080
-    if(ratioHor === 64 && ratioVer === 27) {
-      ratioHor = 21;
-      ratioVer = 9;
-    }
-    //3440 x 1440
-    if(ratioHor === 43 && ratioVer === 18) {
-      ratioHor = 21;
-      ratioVer = 9;
-    }
-    //Change 8:5 to 16:10
-    if(ratioHor === 8 && ratioVer === 5) {
-      ratioHor = 16;
-      ratioVer = 10;
-    }
-    
-    return {
-      ratio: width / height,
-      ratioHor: ratioHor,
-      ratioVer: ratioVer
-    }
-  }
-  
-  function gcd(a, b) {
-    // Not fastest algorithm but good enough
-    if(!b) {
-      return a;
-    }
-    return gcd(b, a % b);
-  }
-});
+  };
+}(window.ppdCalc = window.ppdCalc || {}, jQuery));
