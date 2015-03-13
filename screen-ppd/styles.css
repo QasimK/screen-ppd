@@ -1,0 +1,32 @@
+body
+{
+    font-family: 'Open Sans', sans-serif;
+}
+
+p, .prefix, input
+{
+    font-size: 1.2em;
+}
+
+p
+{
+    line-height: 1.5;
+}
+
+input[type=number]
+{
+    font-size: 1em; /* Stop page zooming on mobile */
+}
+
+/* Hide radio buttons and use text button instead */
+input[type=radio]
+{
+    display: none;
+    visibility: hidden;
+}
+
+input[type=range]
+{
+    width: 100%;
+    font-size: 1em;
+}

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,114 +7,177 @@
     <meta charset="utf-8">
     <script src="jquery-2.1.3.min.js"></script>
     <script src="screen-ppd.js"></script>
+    <link rel="stylesheet" href="normalize.css"/>
+    <link rel="stylesheet" href="foundation/foundation.min.css"/>
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans'/>
+    <link rel="stylesheet" href="styles.css"/>
     <title>Screen PPD calculator</title>
   </head>
   <body>
-    <header>
-      <h1>Screen PPD Calculator</h1>
-      <p>
-        This will allow you to calculate the Pixels Per Degree (PPD)
-        you will see from a screen given its size & resolution and, importantly,
-        the distance the screen is placed. Additionally, you can set a
-        scaling factor that you may be using with the OS.
-      </p>
+    <header class="row">
+      <div class="small-12 column">
+        <h1>Screen PPD Calculator</h1>
+      </div>
+      <div class="small-12 column">
+        <p>
+          This will allow you to calculate the Pixels Per Degree (PPD)
+          you will see from a screen given its size & resolution and, importantly,
+          the distance the screen is placed. Additionally, you can set a
+          scaling factor that you may be using with the OS.
+        </p>
+<a href="#" class="button success">Default Button</a>
+      </div>
     </header>
     
-    <section>
-      <h2>Calculator</h2>
+    <section class="row">
+      <h2 class="small-12 column">Calculator</h2>
       <form>
-        <fieldset>
-          <legend>Enter Screen Information</legend>
-          <p>
-            <label for="diagonal-size">Diagonal Size</label>
-            <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
-                   value="" min="1" required autofocus/>
-            
-            <input name="diagonal-units" id="diagonal-inches" class="userin"
-                   type="radio" value="inches" checked/>
-            <label for="diagonal-inches">inches</label>
-            
-            <input name="diagonal-units" id="diagonal-cm" class="userin"
-                   type="radio" value="cm"/>
-            <label for="diagonal-cm">cm</label>
-          </p>
-          <p>
-            <label for="resolution-width">Resolution</label>
-            <input id="resolution-width" name="resolution-width" class="userin"
-              type="number" value="" min="1" step="1" required/>
-            <label for="resolution-height">x</label>
-            <input id="resolution-height" name="resolution-height" class="userin"
-              type="number" value="" min="1" step="1" required/>
-          </p>
-          <p>
-            <label for="distance">Viewing Distance</label>
-            <input id="distance" name="distance" class="userin rangein" type="range"
-              value="25" min="1" max="120"/>
-            <output name="distance_value" id="distance_value" for="distance">-</output>
-            
-            <input name="distance-units" id="distance-cm" class="userin"
-                   type="radio" value="cm" checked/>
-            <label for="distance-cm">cm</label>
-            <input name="distance-units" id="distance-inches" class="userin"
-                   type="radio" value="inches"/>
-            <label for="distance-inches">inches</label>
-            <input name="distance-units" id="distance-feet" class="userin"
-                   type="radio" value="feet"/>
-            <label for="distance-feet">feet</label>
-            <input name="distance-units" id="distance-m" class="userin"
-                   type="radio" value="m"/>
-            <label for="distance-m">m</label>
-          </p>
-          
+        <div class="small-12 medium-6 columns">
           <fieldset>
-            <legend>Scaling</legend>
-            <input name="scaling" id="scale-100" class="userin" type="radio" value="100" checked/>
-            <label for="scale-100">100%</label>
-            <input name="scaling" id="scale-125" class="userin" type="radio" value="125"/>
-            <label for="scale-125">125%</label>
-            <input name="scaling" id="scale-150" class="userin" type="radio" value="150"/>
-            <label for="scale-150">150%</label>
-            <input name="scaling" id="scale-200" class="userin" type="radio" value="200"/>
-            <label for="scale-200">200%</label>
+            <legend>Enter Screen Information</legend>
+            
+            <div class="row collapse">
+              <div class="small-6 medium-6 large-4 columns">
+                <label for="diagonal-size">
+                  <span class="prefix">Diagonal Size</span>
+                </label>
+              </div>
+              <div class="small-6 medium-6 large-2 columns" style="padding-bottom: 0">
+                <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
+                       style="margin-bottom: 0.1em"
+                       value="" min="1" required autofocus/>
+              </div>
+                
+              <div class="small-12 medium-12 large-5 columns">                
+                <input name="diagonal-units" id="diagonal-inches" class="userin"
+                       type="radio" value="inches" checked/>
+                <input name="diagonal-units" id="diagonal-cm" class="userin"
+                       type="radio" value="cm"/>
+                
+                <ul class="button-group even-2">
+                  <li>
+                    <label for="diagonal-inches" class="button tiny">inches</label>
+                  </li>
+                  <li>
+                    <label for="diagonal-cm" class="button tiny">cm</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="row collapse">
+              <div class="small-12 medium-4 columns">
+                <label for="resolution-width">
+                  <span class="prefix">Resolution</span>
+                </label>
+              </div>
+              <div class="small-6 medium-4 columns">
+                <input id="resolution-width" name="resolution-width" class="userin"
+                  type="number" value="" min="1" step="1" required/>
+              </div>
+              <div class="small-6 medium-4 columns">
+                <input id="resolution-height" name="resolution-height" class="userin"
+                  type="number" value="" min="1" step="1" required/>
+              </div>
+            </div>
+            
+            <div class="row collapse">
+              <div class="small-12 medium-6 columns">
+                <label for="distance">
+                  <span class="prefix">
+                    Distance
+                    (<output name="distance_value" id="distance_value" for="distance">-</output>)
+                  </span>
+                </label>
+              </div>
+              <div class="small-12 medium-6 columns">
+                <input id="distance" name="distance" class="userin rangein" type="range"
+                  style="margin: 0.4em auto"
+                  value="25" min="1" max="120"/>
+                
+              </div>
+              <div class="small-12 columns">
+                <input name="distance-units" id="distance-cm" class="userin"
+                       type="radio" value="cm" checked/>
+                <input name="distance-units" id="distance-inches" class="userin"
+                       type="radio" value="inches"/>
+                <input name="distance-units" id="distance-feet" class="userin"
+                       type="radio" value="feet"/>
+                <input name="distance-units" id="distance-m" class="userin"
+                       type="radio" value="m"/>
+                
+                <ul class="button-group even-4">
+                  <li>
+                    <label for="distance-cm" class="button tiny">cm</label>
+                  </li>
+                  <li>
+                    <label for="distance-inches" class="button tiny">inches</label>
+                  </li>
+                  <li>
+                    <label for="distance-m" class="button tiny">m</label>
+                  </li>
+                  <li>
+                    <label for="distance-feet" class="button tiny">feet</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <fieldset>
+              <legend>Scaling</legend>
+              <input name="scaling" id="scale-100" class="userin" type="radio" value="100" checked/>
+              <label for="scale-100">100%</label>
+              <input name="scaling" id="scale-125" class="userin" type="radio" value="125"/>
+              <label for="scale-125">125%</label>
+              <input name="scaling" id="scale-150" class="userin" type="radio" value="150"/>
+              <label for="scale-150">150%</label>
+              <input name="scaling" id="scale-200" class="userin" type="radio" value="200"/>
+              <label for="scale-200">200%</label>
+            </fieldset>
           </fieldset>
-        </fieldset>
+        </div>
         
-        <fieldset>
-          <legend>Pixels Per Degree</legend>
-          <p>
-            <label for="ppd">PPD:</label>
-            <output name="ppd" id="ppd">-</output>
-          </p>
-          <p>
-            <label for="horizontal-fov">Horizontal FOV:</label>
-            <output name="horizontal-fov" id="horizontal-fov">-</output>&#176;
-          </p>
-        </fieldset>
+        <div class="small-12 medium-6 columns">
+          <fieldset>
+            <legend>Pixels Per Degree</legend>
+            <p>
+              <label for="ppd">PPD:</label>
+              <output name="ppd" id="ppd">-</output>
+            </p>
+            <p>
+              <label for="horizontal-fov">Horizontal FOV:</label>
+              <output name="horizontal-fov" id="horizontal-fov">-</output>&#176;
+            </p>
+          </fieldset>
+        </div>
         
-        <fieldset id="additional-info">
-          <legend>Additional Information</legend>
-          <p>
-            <label for="aspect-ratio">Aspect ratio:</label>
-            <output name="aspect-ratio" id="aspect-ratio">-</output>
-          </p>
-          <p>
-            <label for="monitor-size">Monitor size:</label>
-            <output name="monitor-size" id="monitor-size">-</output>
-            <span id="monitor-size-units" class="units-text">inches</span>
-          </p>
-          <p>
-            <label for="ppu">PPI:</label>
-            <output name="ppu" id="ppu">-</output>
-          </p>
-          <p>
-            <label for="scaled-ppu">Scaled PPI:</label>
-            <output name="scaled-ppu" id="scaled-ppu">-</output>
-          </p>
-          <p>
-            <label for="scaled-resolution">Scaled Resolution:</label>
-            <output name="scaled-resolution" id="scaled-resolution">-</output>
-          </p>
-        </fieldset>
+        <div class="small-12 medium-12 columns">
+          <fieldset id="additional-info">
+            <legend>Additional Information</legend>
+            <p>
+              <label for="aspect-ratio">Aspect ratio:</label>
+              <output name="aspect-ratio" id="aspect-ratio">-</output>
+            </p>
+            <p>
+              <label for="monitor-size">Monitor size:</label>
+              <output name="monitor-size" id="monitor-size">-</output>
+              <span id="monitor-size-units" class="units-text">inches</span>
+            </p>
+            <p>
+              <label for="ppu">PPI:</label>
+              <output name="ppu" id="ppu">-</output>
+            </p>
+            <p>
+              <label for="scaled-ppu">Scaled PPI:</label>
+              <output name="scaled-ppu" id="scaled-ppu">-</output>
+            </p>
+            <p>
+              <label for="scaled-resolution">Scaled Resolution:</label>
+              <output name="scaled-resolution" id="scaled-resolution">-</output>
+            </p>
+          </fieldset>
+        </div>
+       
       </form>
     </section>
   </body>
