@@ -2,6 +2,15 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+.ppd {
+    text-align: center;
+}
+
+#ppd {
+    font-size: 5em;
+    font-weight: bolder;
+}
+
 /* Create a full solid border on foundation prefix and postfix spans */
 span.fix {
     border-left-style: solid;
