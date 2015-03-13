@@ -45,7 +45,7 @@
               <div class="small-6 medium-6 large-2 columns" style="padding-bottom: 0">
                 <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
                        style="margin-bottom: 0.1em"
-                       value="" min="1" required autofocus/>
+                       value="" min="1" pattern="[\d]*" required autofocus/>
               </div>
                 
               <div class="small-12 medium-12 large-5 columns">                
@@ -73,11 +73,11 @@
               </div>
               <div class="small-6 medium-4 columns">
                 <input id="resolution-width" name="resolution-width" class="userin"
-                  type="number" value="" min="1" step="1" required/>
+                  type="number" value="" min="1" step="1"  pattern="[\d]*" required/>
               </div>
               <div class="small-6 medium-4 columns">
                 <input id="resolution-height" name="resolution-height" class="userin"
-                  type="number" value="" min="1" step="1" required/>
+                  type="number" value="" min="1" step="1"  pattern="[\d]*" required/>
               </div>
             </div>
             

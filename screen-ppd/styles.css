@@ -1,32 +1,37 @@
-body
-{
+body {
     font-family: 'Open Sans', sans-serif;
 }
 
-p, .prefix, input
-{
+p, .prefix, input {
     font-size: 1.2em;
 }
 
-p
-{
+p {
     line-height: 1.5;
 }
 
-input[type=number]
-{
+input[type=number] {
     font-size: 1em; /* Stop page zooming on mobile */
 }
 
 /* Hide radio buttons and use text button instead */
-input[type=radio]
-{
+input[type=radio] {
     display: none;
     visibility: hidden;
 }
 
-input[type=range]
-{
+input[type=range] {
     width: 100%;
     font-size: 1em;
+}
+
+/* Hide spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
