@@ -30,7 +30,7 @@
     
     <section class="row">
       <h2 class="small-12 column">Calculator</h2>
-      <form>
+      <form id="ppd-calculator">
         <div class="small-12 medium-6 columns">
           <fieldset>
             <legend>Enter Screen Information</legend>
@@ -41,7 +41,7 @@
                   <span class="prefix">Diagonal Size</span>
                 </label>
               </div>
-              <div class="small-6 medium-6 large-2 columns" style="padding-bottom: 0">
+              <div class="small-6 medium-6 large-2 columns">
                 <input id="diagonal-size" name="diagonal-size" class="userin" type="number"
                        style="margin-bottom: 0.1em"
                        value="" min="1" pattern="\d*" required autofocus/>
@@ -55,45 +55,47 @@
                 
                 <ul class="button-group even-2">
                   <li>
-                    <label for="diagonal-inches" class="button tiny">inches</label>
+                    <label for="diagonal-inches" class="button expand tiny">inches</label>
                   </li>
                   <li>
-                    <label for="diagonal-cm" class="button tiny">cm</label>
+                    <label for="diagonal-cm" class="button secondary expand tiny">cm</label>
                   </li>
                 </ul>
               </div>
             </div>
             
             <div class="row collapse">
-              <div class="small-12 medium-4 columns">
+              <div class="small-12 medium-6 large-4 columns">
                 <label for="resolution-width">
                   <span class="prefix">Resolution</span>
                 </label>
               </div>
-              <div class="small-6 medium-4 columns">
+              <div class="small-6 medium-3 large-2 columns">
                 <input id="resolution-width" name="resolution-width" class="userin"
-                  type="number" value="" min="1" step="1"  pattern="\d*" required/>
+                  type="number" value="" min="1" step="1"  pattern="\d*"
+                  placeholder="Width" required/>
               </div>
-              <div class="small-6 medium-4 columns">
+              <div class="small-6 medium-3 large-2 end columns">
                 <input id="resolution-height" name="resolution-height" class="userin"
-                  type="number" value="" min="1" step="1"  pattern="\d*" required/>
+                  type="number" value="" min="1" step="1"  pattern="\d*"
+                  placeholder="Height" required/>
               </div>
             </div>
             
             <div class="row collapse">
-              <div class="small-12 medium-6 columns">
+              <div class="small-12 medium-6 large-4 columns">
                 <label for="distance">
-                  <span class="prefix">
+                  <span class="prefix fix">
                     Distance
-                    (<output name="distance_value" id="distance_value" for="distance">-</output>)
+                    (<output name="distance_value" id="distance_value" for="distance">-</output>
+                     <output name="distance_units" id="distance_units" for="distance">-</output>)
                   </span>
                 </label>
               </div>
-              <div class="small-12 medium-6 columns">
+              <div class="small-12 medium-6 large-8 columns">
                 <input id="distance" name="distance" class="userin rangein" type="range"
-                  style="margin: 0.4em auto"
+                  astyle="margin: 0.6em auto"
                   value="25" min="1" max="120"/>
-                
               </div>
               <div class="small-12 columns">
                 <input name="distance-units" id="distance-cm" class="userin"
@@ -107,32 +109,50 @@
                 
                 <ul class="button-group even-4">
                   <li>
-                    <label for="distance-cm" class="button tiny">cm</label>
+                    <label for="distance-cm" class="button expand tiny">cm</label>
                   </li>
                   <li>
-                    <label for="distance-inches" class="button tiny">inches</label>
+                    <label for="distance-inches" class="button secondary expand tiny">inches</label>
                   </li>
                   <li>
-                    <label for="distance-m" class="button tiny">m</label>
+                    <label for="distance-m" class="button secondary expand tiny">m</label>
                   </li>
                   <li>
-                    <label for="distance-feet" class="button tiny">feet</label>
+                    <label for="distance-feet" class="button secondary expand tiny">feet</label>
                   </li>
                 </ul>
               </div>
             </div>
             
-            <fieldset>
-              <legend>Scaling</legend>
-              <input name="scaling" id="scale-100" class="userin" type="radio" value="100" checked/>
-              <label for="scale-100">100%</label>
-              <input name="scaling" id="scale-125" class="userin" type="radio" value="125"/>
-              <label for="scale-125">125%</label>
-              <input name="scaling" id="scale-150" class="userin" type="radio" value="150"/>
-              <label for="scale-150">150%</label>
-              <input name="scaling" id="scale-200" class="userin" type="radio" value="200"/>
-              <label for="scale-200">200%</label>
-            </fieldset>
+            <div class="row collapse">
+              <div class="small-12 large-4 columns">
+                <span class="prefix fix">
+                  DPI/Zoom Scaling
+                </span>
+              </div>
+              <div class="small-12 large-7 columns">
+                <input name="scaling" id="scale-100" class="userin" type="radio" value="100" checked/>
+                <input name="scaling" id="scale-125" class="userin" type="radio" value="125"/>
+                <input name="scaling" id="scale-150" class="userin" type="radio" value="150"/>
+                <input name="scaling" id="scale-200" class="userin" type="radio" value="200"/>
+                
+                <ul class="button-group even-4">
+                  <li>
+                    <label for="scale-100" class="button expand small">100%</label>
+                  </li>
+                  <li>
+                    <label for="scale-125" class="button expand small secondary">125%</label>
+                  </li>
+                  <li>
+                    <label for="scale-150" class="button expand small secondary">150%</label>
+                  </li>
+                  <li>
+                    <label for="scale-200" class="button expand small secondary">200%</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
           </fieldset>
         </div>
         
@@ -146,6 +166,7 @@
             <p>
               <label for="horizontal-fov">Horizontal FOV:</label>
               <output name="horizontal-fov" id="horizontal-fov">-</output>&#176;
+              <span class="radius info label">For a Flat Screen</span>
             </p>
           </fieldset>
         </div>

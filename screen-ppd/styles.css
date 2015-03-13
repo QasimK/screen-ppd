@@ -2,16 +2,17 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-p, .prefix, input {
-    font-size: 1.2em;
+/* Create a full solid border on foundation prefix and postfix spans */
+span.fix {
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-style: solid;
+    border-right-width: 1px;
 }
 
-p {
-    line-height: 1.5;
-}
-
+/* Stop page zooming on mobile */
 input[type=number] {
-    font-size: 1em; /* Stop page zooming on mobile */
+    font-size: 1em;
 }
 
 /* Hide radio buttons and use text button instead */
@@ -20,9 +21,9 @@ input[type=radio] {
     visibility: hidden;
 }
 
+/* Expand range to max */
 input[type=range] {
     width: 100%;
-    font-size: 1em;
 }
 
 /* Hide spinners */
