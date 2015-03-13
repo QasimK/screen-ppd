@@ -143,7 +143,11 @@ $(document).ready(function() {
   
   function updateDistanceText() {
     form.distanceNumberText.val(form.distance.val());
-    form.distanceUnitsText.val(form.distanceActiveUnit().val());
+    var unitsText = form.distanceActiveUnit().val();
+    if (unitsText === "inches") {
+      unitsText = '"';
+    }
+    form.distanceUnitsText.val(unitsText);
   }
   
   
