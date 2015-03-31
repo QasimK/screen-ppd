@@ -204,6 +204,7 @@ $(document).ready(function() {
     }
     
     var PPD = Math.round(calcs.PPD);
+    var scaledPPD = Math.round(calcs.scaledPPD);
     var horizontalFOV = Math.round(calcs.horizontalFOV);
     var aspectRatio = calcs.aspectRatioW + ":" + calcs.aspectRatioH + " (" + 
                       Math.round(calcs.aspectRatio * 1000) / 1000 + ")";
@@ -215,6 +216,7 @@ $(document).ready(function() {
                             Math.round(calcs.scaledResH);
     
     $('#ppd').text(PPD);
+    $('#ppd-scaled').text(scaledPPD);
     $('#horizontal-fov').text(horizontalFOV);
     $('#aspect-ratio').text(aspectRatio);
     $('#monitor-size').text(monitorSize);
@@ -333,6 +335,7 @@ $(document).ready(function() {
       scaledResH: 1080,
       horizontalFOV: ,
       PPD: ,
+      scaledPPD: ,
       
       // Unit dependent (in metric):
       lengthW: ,
@@ -354,7 +357,8 @@ $(document).ready(function() {
     var lengthH = info.diagonalLength / Math.sqrt(1 + Math.pow(aspectRatio, 2));
     
     var horizontalFOV = 180 / Math.PI * 2 * Math.atan( lengthW / 2 / info.distance);
-    var PPD = scaledResW / horizontalFOV;
+    var PPD = info.resW / horizontalFOV;
+    var scaledPPD = scaledResW / horizontalFOV;
     
     var PPCM = info.resW / lengthW; // Pixels per unit
     var scaledPPCM = PPCM / info.scaling;
@@ -367,6 +371,7 @@ $(document).ready(function() {
       scaledResH: scaledResH,
       horizontalFOV: horizontalFOV,
       PPD: PPD,
+      scaledPPD: scaledPPD,
       
       lengthW: lengthW,
       lengthH: lengthH,
