@@ -1,3 +1,3 @@
-# QasimK.github.io
+# Screen-PPD
 
-Summary of my GitHub projects and other things
+Use a screen's size and resolution combined with your viewing distance (from your eyes to the screen) to calculate the Pixels Per Degree (PPD).
