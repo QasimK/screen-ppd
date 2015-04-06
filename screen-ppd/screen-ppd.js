@@ -122,7 +122,7 @@ $(document).ready(function() {
       maxSize = 100;
     }
     else if (distanceUnits === "cm") {
-      maxSize = 250;
+      maxSize = 100;
     }
     else if (distanceUnits === "feet") {
       maxSize = 30;
