@@ -178,7 +178,7 @@ $(document).ready(function() {
       diagSF = 100;
     }
     
-    var diagonalLength = parseInt(form.diagonalLength.val(), 10);
+    var diagonalLength = parseFloat(form.diagonalLength.val());
     var resW = parseInt(form.resWidth.val(), 10);
     var resH = parseInt(form.resHeight.val(), 10);
     var distance = parseFloat(form.distance.val(), 10);
