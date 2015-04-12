@@ -325,23 +325,28 @@ $(document).ready(function() {
     var ratioHor = width / theGCD;
     var ratioVer = height / theGCD;
     
+    //Only one of width or height is valid
+    if(isNaN(ratioHor) || isNaN(ratioVer)) {
+      ratioHor = NaN;
+      ratioVer = NaN;
+    }
     //1366 x 768
-    if(ratioHor === 683 && ratioVer === 384) {
+    else if(ratioHor === 683 && ratioVer === 384) {
       ratioHor = 16;
       ratioVer = 9;
     }
     //2560 x 1080
-    if(ratioHor === 64 && ratioVer === 27) {
+    else if(ratioHor === 64 && ratioVer === 27) {
       ratioHor = 21;
       ratioVer = 9;
     }
     //3440 x 1440
-    if(ratioHor === 43 && ratioVer === 18) {
+    else if(ratioHor === 43 && ratioVer === 18) {
       ratioHor = 21;
       ratioVer = 9;
     }
     //Change 8:5 to 16:10
-    if(ratioHor === 8 && ratioVer === 5) {
+    else if(ratioHor === 8 && ratioVer === 5) {
       ratioHor = 16;
       ratioVer = 10;
     }
