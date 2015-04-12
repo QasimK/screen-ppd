@@ -11,6 +11,47 @@ $(document).ready(function() {
   var form;
   var prevDistanceUnits;
   
+  function majorError(message) {
+    // Log a major error
+    window.alert(message);
+  }
+  
+  function onSelectCommonResolution(e) {
+    var resWidth, resHeight;
+    switch(e.target.id) {
+      case "res-4k":
+        resWidth = 3840;
+        resHeight = 2160;
+        break;
+      
+      case "res-1080p":
+        resWidth = 1920;
+        resHeight = 1080;
+        break;
+      
+      case "res-720p":
+        resWidth = 1280;
+        resHeight = 720;
+        break;
+      
+      case "res-1440p":
+        resWidth = 2560;
+        resHeight = 1440;
+        break;
+      
+      case "res-5k":
+        resWidth = 5120;
+        resHeight = 2880;
+        break;
+      
+      default:
+        majorError("Major Error\nUnknown selected resolution: " + e.target.id);
+    }
+    
+    form.resWidth.val(resWidth);
+    form.resHeight.val(resHeight);
+  }
+  
   
   function onDiagonalUnitsChange() {
     var diagonalUnits = form.diagonalActiveUnit().val();
@@ -267,6 +308,9 @@ $(document).ready(function() {
     form.distance.on("input", updateDistanceText); // Update as mouse dragged
     form.distance.on("input", circuit); // Do a complete calculation
     $('.userin').change(circuit); //Any change on a user-input form element
+    
+    // Changing common resolution
+    $('#common-resolutions a').click(onSelectCommonResolution);
   }
   
 }(window.ppdCalc = window.ppdCalc || {}, jQuery));
