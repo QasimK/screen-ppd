@@ -290,7 +290,8 @@ $(document).ready(function() {
       distanceButtons: $("label[for^='distance-units-']"),
       scalingInputs: $("input[type='radio'][name='scaling']"),
       scalingActiveInput: function() {return $("input[type='radio'][name='scaling']:checked")},
-      scalingButtons: $("label[for^='scale-']")
+      scalingButtons: $("label[for^='scale-']"),
+      linkActionButtons: $(".link-action")
     }
     
     prevDistanceUnits = form.distanceActiveUnit().val()
@@ -307,6 +308,7 @@ $(document).ready(function() {
     form.scalingInputs.change(updateScalingButtons);
     form.distance.on("input", updateDistanceText); // Update as mouse dragged
     form.distance.on("input", circuit); // Do a complete calculation
+    form.linkActionButtons.click(circuit); // Links that alter the form
     $('.userin').change(circuit); //Any change on a user-input form element
     
     // Changing common resolution
