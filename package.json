@@ -1,0 +1,9 @@
+{
+	"name": "screen-ppd",
+	"devDependencies": {
+		"jshint": "latest"
+	},
+	"scripts": {
+		"lint": "jshint screen-ppd/"
+	}
+}
