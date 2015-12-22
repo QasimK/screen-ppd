@@ -9,4 +9,4 @@ Use a screen's size and resolution combined with your viewing distance (from you
 Install requirements:
 
 - (System) install [npm](https://www.npmjs.com/)
-- Install dependencies inside the <project root>: `npm install`
+- Install dependencies inside the `<project root>`: `npm install`
