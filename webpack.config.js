@@ -1,7 +1,6 @@
 var CleanWebpackPlugin = require('clean-webpack-plugin')
-// var CopyWebpackPlugin = require('copy-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     context: __dirname,
@@ -33,12 +32,6 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        // new CopyWebpackPlugin([
-        //     {
-        //         from: './src/index.html',
-        //         to: './dist/index.html'
-        //     }
-        // ]),
         new ExtractTextPlugin("[name].css"),
         new HtmlWebpackPlugin({
           filename: 'index.html',
