@@ -9,17 +9,13 @@
   "bugs": "https://github.com/QasimK/screen-ppd/issues",
   "scripts": {
     "lint": "eslint ./src/js/",
-    "test": "echo 'TODO: TEST'",
     "start": "webpack-dev-server --content-base ./dist/ --open",
     "build": "webpack",
     "build:dev": "webpack -d",
-    "watch:dev": "webpack -d --watch",
-    "posttest": "npm run lint",
-    "prebuild": "npm test"
+    "watch:dev": "webpack -d --watch"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.6",
-    "copy-webpack-plugin": "^0.3.3",
     "css-loader": "^0.23.1",
     "eslint": "^1.10.3",
     "eslint-config-standard": "^4.4.0",

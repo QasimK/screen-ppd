@@ -1,8 +1,6 @@
-module.exports = {
-  calculate: calculate
-}
+module.exports = calculate;
 
-// Public
+
 function calculate(info) {
   /* Take in info = { // in metric form
     diagonalLength: ,
@@ -60,9 +58,13 @@ function calculate(info) {
     lengthW: lengthW,
     lengthH: lengthH,
     PPCM: PPCM,
-    scaledPPCM: scaledPPCM
+    scaledPPCM: scaledPPCM,
   }
 }
+
+
+// PRIVATE
+
 
 function getAspectRatio(width, height) {
   var theGCD = gcd(width, height)
@@ -94,7 +96,7 @@ function getAspectRatio(width, height) {
   return {
     ratio: width / height,
     ratioHor: ratioHor,
-    ratioVer: ratioVer
+    ratioVer: ratioVer,
   }
 }
 

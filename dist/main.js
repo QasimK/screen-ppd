@@ -479,7 +479,7 @@
 	/* Interactive interface */
 
 	module.exports = {
-	  initialise: initialise
+	  initialise: initialise,
 	}
 
 	const $ = window.$ = window.jQuery = __webpack_require__(31)
@@ -696,7 +696,7 @@
 	    resW: resW,
 	    resH: resH,
 	    distance: diagSF * distance,
-	    scaling: scaling
+	    scaling: scaling,
 	  }
 	}
 
@@ -754,7 +754,7 @@
 	    distanceButtons: $("label[for^='distance-units-']"),
 	    scalingInputs: $("input[type='radio'][name='scaling']"),
 	    scalingActiveInput: function() { return $("input[type='radio'][name='scaling']:checked") },
-	    scalingButtons: $("label[for^='scale-']")
+	    scalingButtons: $("label[for^='scale-']"),
 	  }
 
 	  prevDistanceUnits = form.distanceActiveUnit().val()
@@ -9998,11 +9998,9 @@
 /* 32 */
 /***/ function(module, exports) {
 
-	module.exports = {
-	  calculate: calculate
-	}
+	module.exports = calculate;
 
-	// Public
+
 	function calculate(info) {
 	  /* Take in info = { // in metric form
 	    diagonalLength: ,
@@ -10060,9 +10058,13 @@
 	    lengthW: lengthW,
 	    lengthH: lengthH,
 	    PPCM: PPCM,
-	    scaledPPCM: scaledPPCM
+	    scaledPPCM: scaledPPCM,
 	  }
 	}
+
+
+	// PRIVATE
+
 
 	function getAspectRatio(width, height) {
 	  var theGCD = gcd(width, height)
@@ -10094,7 +10096,7 @@
 	  return {
 	    ratio: width / height,
 	    ratioHor: ratioHor,
-	    ratioVer: ratioVer
+	    ratioVer: ratioVer,
 	  }
 	}
 

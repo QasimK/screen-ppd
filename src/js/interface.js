@@ -1,7 +1,7 @@
 /* Interactive interface */
 
 module.exports = {
-  initialise: initialise
+  initialise: initialise,
 }
 
 const $ = window.$ = window.jQuery = require('jquery')
@@ -218,7 +218,7 @@ function getInput() {
     resW: resW,
     resH: resH,
     distance: diagSF * distance,
-    scaling: scaling
+    scaling: scaling,
   }
 }
 
@@ -276,7 +276,7 @@ function initialise() {
     distanceButtons: $("label[for^='distance-units-']"),
     scalingInputs: $("input[type='radio'][name='scaling']"),
     scalingActiveInput: function() { return $("input[type='radio'][name='scaling']:checked") },
-    scalingButtons: $("label[for^='scale-']")
+    scalingButtons: $("label[for^='scale-']"),
   }
 
   prevDistanceUnits = form.distanceActiveUnit().val()
