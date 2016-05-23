@@ -3,7 +3,7 @@
 Use a screen's size and resolution combined with your viewing distance
 (from your eyes to the screen) to calculate the Pixels Per Degree (PPD).
 
-[Go to the calculator](https://qasimk.github.io/screen-ppd/screen-ppd/)
+The calculator is not currently hosted; a pre webpack-redesign (using straightforward CSS/Foundation, JS/jQuery) can be seen with [this commit](https://github.com/QasimK/screen-ppd/tree/fdd6071737a1f33a12142ffdc788d0b9f6e81a95).
 
 
 ## Development Setup
