@@ -7,6 +7,11 @@ trim_trailing_whitespace = true
 end_of_line = lf
 insert_final_newline = true
 
-[*.js]
+[*.{js,html}]
 indent_style = space
+
+[*.js]
 indent_size = 4
+
+[*.html]
+indent_size = 2
