@@ -12,7 +12,8 @@
     "start": "webpack-dev-server --content-base ./dist/ --open",
     "build": "webpack",
     "build:dev": "webpack -d",
-    "watch:dev": "webpack -d --watch"
+    "watch:dev": "webpack -d --watch",
+    "deploy": "git checkout origin/master && git subtree split --prefix dist -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages && git checkout -"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.6",
