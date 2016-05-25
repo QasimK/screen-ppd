@@ -19,11 +19,9 @@ Lint:
     # TODO watch & CI
     npm run lint:watch
 
-Test:
+Test (TODO: There are currently no user-interface tests)
 
-    # TODO any tests
     npm run test
-    # TODO watch
     npm run test:watch
 
 Build:

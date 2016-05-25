@@ -6,7 +6,7 @@ module.exports = {
 
 const $ = window.$ = window.jQuery = require('jquery')
 
-const calc = require('./calc.js')
+const calc = require('pixels-per-degree');
 
 
 // Private
@@ -254,7 +254,7 @@ function setOutput(calcs) {
 
 
 function circuit() {
-  setOutput(calc.calculate(getInput()))
+  setOutput(calc.ppdCalc(getInput()))
 }
 
 // Public

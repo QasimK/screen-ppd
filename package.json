@@ -31,7 +31,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "pixels-per-degree": "git://github.com/qasimk/pixels-per-degree.git"
   },
   "private": true
 }
