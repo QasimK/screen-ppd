@@ -4,9 +4,7 @@ Hosted @ <https://qasimk.github.io/screen-ppd/>
 
 Use a screen's size and resolution combined with your viewing distance (from your eyes to the screen) to calculate the Pixels Per Degree (PPD).
 
-This single-page webapp uses Webpack, ES6/Babel/jQuery, and SASS.
-
-(TODO: Remove jQuery dependency.)
+This single-page web-app uses Webpack, Standard, ES6/jQuery, and SASS.
 
 
 ## Development guide
@@ -16,26 +14,31 @@ Install requirements:
 - (System) install node & [npm](https://www.npmjs.com/).
 - Install dependencies inside `<project root>` with `npm install`.
 
-Lint:
+Development:
 
+    # Linting
     npm run lint
 
+    # Hot-reload development web-server
+    $ npm run start
 
-Build:
+    # Dev build
+    $ npm run build:dev
 
-    // Webserver @ http://localhost:8080/webpack-dev-server/
-    npm run start
-    // Production build
-    npm run build
-    // Dev build
-    npm run build:dev
-    // Dev watch
-    npm run watch:dev
+Deployment (<https://qasimk.github.io/screen-ppd/>):
 
-Restricted deploy to <https://qasimk.github.io/screen-ppd/>:
-(Note this will deploy the `dist/` folder of `origin/master`)
+    $ npm run build
+    # Note this will deploy the `dist/` folder of `origin/master`
+    $ npm run deploy
 
-    npm run deploy
+All make commands are available in `package.json`.
+
+
+### TODOs
+
+* Remove jQuery dependency (it is not necessary anymore)
+* Upgrade to minified Foundation 6+ (current CSS file is very large)
+* Use normalize.js from NPM (see mvtemp branch on github)
 
 
 ## References

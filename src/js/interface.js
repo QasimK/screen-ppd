@@ -1,24 +1,23 @@
 /* Interactive interface */
 
 module.exports = {
-  initialise: initialise,
+  initialise: initialise
 }
 
 const $ = window.$ = window.jQuery = require('jquery')
 
-const calc = require('pixels-per-degree');
-
+const calc = require('pixels-per-degree')
 
 // Private
 var form
 var prevDistanceUnits
 
-function majorError(message) {
+function majorError (message) {
   // Log a major error
   window.alert(message)
 }
 
-function onSelectCommonResolution(e) {
+function onSelectCommonResolution (e) {
   var resWidth, resHeight
   switch (e.target.id) {
     case 'res-4k':
@@ -56,15 +55,14 @@ function onSelectCommonResolution(e) {
   circuit()
 }
 
-
-function onDiagonalUnitsChange() {
+function onDiagonalUnitsChange () {
   var diagonalUnits = form.diagonalActiveUnit().val()
 
   // Update diagonal length
   var DSF
   if (diagonalUnits === 'cm') {
     DSF = 2.54
-  } else {  // inches
+  } else { // inches
     DSF = 1 / 2.54
   }
   var newLength = Math.round(DSF * parseInt(form.diagonalLength.val(), 10))
@@ -84,16 +82,15 @@ function onDiagonalUnitsChange() {
   updateDiagonalButtons()
 }
 
-function onDistanceUnitsChange() {
+function onDistanceUnitsChange () {
   updateDistanceSlider()
   updateDistanceButtons()
   updateDistanceText()
 }
 
-
-function _selectButton(buttonsList, activeInput) {
+function _selectButton (buttonsList, activeInput) {
   var currentSelectedValue = activeInput.val()
-  buttonsList.each(function() {
+  buttonsList.each(function () {
     var correspondingInput = $('#' + $(this).attr('for'))
     if (correspondingInput.val() === currentSelectedValue) {
       $(this).removeClass('secondary')
@@ -103,19 +100,19 @@ function _selectButton(buttonsList, activeInput) {
   })
 }
 
-function updateDiagonalButtons() {
+function updateDiagonalButtons () {
   _selectButton(form.diagonalButtons, form.diagonalActiveUnit())
 }
 
-function updateDistanceButtons() {
+function updateDistanceButtons () {
   _selectButton(form.distanceButtons, form.distanceActiveUnit())
 }
 
-function updateScalingButtons() {
+function updateScalingButtons () {
   _selectButton(form.scalingButtons, form.scalingActiveInput())
 }
 
-function updateDistanceSlider() {
+function updateDistanceSlider () {
   var distanceUnits = form.distanceActiveUnit().val()
   var DSF
   if (prevDistanceUnits === 'inches' && distanceUnits === 'cm') {
@@ -170,7 +167,7 @@ function updateDistanceSlider() {
   form.distance.attr('max', maxSize).attr('step', stepSize).val(newDistance)
 }
 
-function updateDistanceText() {
+function updateDistanceText () {
   form.distanceNumberText.val(form.distance.val())
   var unitsText = form.distanceActiveUnit().val()
   if (unitsText === 'inches') {
@@ -179,8 +176,7 @@ function updateDistanceText() {
   form.distanceUnitsText.val(unitsText)
 }
 
-
-function getInput() {
+function getInput () {
   // Return input as metric measurements
   /* Example: Return {
     diagonalLength: 68.58, //27 inches in metric
@@ -188,15 +184,15 @@ function getInput() {
     resH: 2160,
     distance: 101.6, //40 inches in metric
     scaling: 2 //200% scaling
-  }*/
+  } */
   var diagonalUnits = form.diagonalActiveUnit().val()
-  var DSF = 1  // Assume cm
+  var DSF = 1 // Assume cm
   if (diagonalUnits === 'inches') {
     DSF = 2.54
   }
 
   var distanceUnits = form.distanceActiveUnit().val()
-  var diagSF = 1  // Assume cm
+  var diagSF = 1 // Assume cm
   if (distanceUnits === 'inches') {
     diagSF = 2.54
   } else if (distanceUnits === 'feet') {
@@ -218,11 +214,11 @@ function getInput() {
     resW: resW,
     resH: resH,
     distance: diagSF * distance,
-    scaling: scaling,
+    scaling: scaling
   }
 }
 
-function setOutput(calcs) {
+function setOutput (calcs) {
   // Set output in the appropriate units (takes in calcs from getCalculations)
   var diagonalUnits = form.diagonalActiveUnit().val()
   var DSF = 1 // Assume CM
@@ -252,19 +248,18 @@ function setOutput(calcs) {
   $('#scaled-resolution').text(scaledResolution)
 }
 
-
-function circuit() {
+function circuit () {
   setOutput(calc.ppdCalc(getInput()))
 }
 
 // Public
 // Note: you can move the functions into the update...Buttons function
 // and create a static property
-function initialise() {
+function initialise () {
   form = {
     diagonalLength: $('#diagonal-size'),
     diagonalUnits: $("input:radio[name='diagonal-units']"),
-    diagonalActiveUnit: function() { return $("input:radio[name='diagonal-units']:checked") },
+    diagonalActiveUnit: function () { return $("input:radio[name='diagonal-units']:checked") },
     diagonalButtons: $("label[for^='diagonal-units-']"),
     resWidth: $('#resolution-width'),
     resHeight: $('#resolution-height'),
@@ -272,11 +267,11 @@ function initialise() {
     distanceNumberText: $('#distance-value'),
     distanceUnitsText: $('#distance-units-text'),
     distanceUnits: $("input[type='radio'][name='distance-units']"),
-    distanceActiveUnit: function() { return $("input[type='radio'][name='distance-units']:checked") },
+    distanceActiveUnit: function () { return $("input[type='radio'][name='distance-units']:checked") },
     distanceButtons: $("label[for^='distance-units-']"),
     scalingInputs: $("input[type='radio'][name='scaling']"),
-    scalingActiveInput: function() { return $("input[type='radio'][name='scaling']:checked") },
-    scalingButtons: $("label[for^='scale-']"),
+    scalingActiveInput: function () { return $("input[type='radio'][name='scaling']:checked") },
+    scalingButtons: $("label[for^='scale-']")
   }
 
   prevDistanceUnits = form.distanceActiveUnit().val()
@@ -286,14 +281,14 @@ function initialise() {
   updateScalingButtons()
   updateDistanceText()
   updateDistanceSlider()
-  circuit()  // Calculate PPD (may already be input on the form)
+  circuit() // Calculate PPD (may already be input on the form)
 
   form.diagonalUnits.change(onDiagonalUnitsChange)
   form.distanceUnits.change(onDistanceUnitsChange)
   form.scalingInputs.change(updateScalingButtons)
-  form.distance.on('input', updateDistanceText)  // Update as mouse dragged
-  form.distance.on('input', circuit)  // Do a complete calculation
-  $('.userin').change(circuit)  // Any change on a user-input form element
+  form.distance.on('input', updateDistanceText) // Update as mouse dragged
+  form.distance.on('input', circuit) // Do a complete calculation
+  $('.userin').change(circuit) // Any change on a user-input form element
 
   // Changing common resolution
   $('#common-resolutions a').click(onSelectCommonResolution)

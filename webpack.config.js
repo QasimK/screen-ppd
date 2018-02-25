@@ -1,43 +1,53 @@
 var CleanWebpackPlugin = require('clean-webpack-plugin')
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-    context: __dirname,
-    entry: './src/index.js',
-    output: {
-        path: './dist',
-        filename: '[name].js',
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.css$/,
-                loader: "style!css"
-            },
-            {
-                test: /\.sass$/,
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass?indentedSyntax&sourceMap'),
-            },
-            {
-                test: /\.(woff|woff2)$/,
-                loader: 'url-loader?limit=10000&name=fonts/[name].[hash:6].[ext]',
-            },
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/,
-                loader: 'url-loader?limit=10000&name=images/[name].[hash:6].[ext]',
-            },
+  context: __dirname,
+  entry: './src/index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: '[name].js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(css|sass)$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: false
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: false
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(woff|woff2)$/,
+        loader: 'url-loader?limit=10000&name=fonts/[name].[hash:6].[ext]'
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        loader: 'url-loader?limit=10000&name=images/[name].[hash:6].[ext]'
+      }
 
-        ],
-    },
-    plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new ExtractTextPlugin("[name].css"),
-        new HtmlWebpackPlugin({
-          filename: 'index.html',
-          template: './src/index.html',
-          inject: 'body',
-          hash: true,
-        }),
-    ],
+    ]
+  },
+  plugins: [
+    new CleanWebpackPlugin(['dist']),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+      inject: 'body',
+      hash: true,
+    })
+  ]
 }
