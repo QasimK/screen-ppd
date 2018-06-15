@@ -39,6 +39,8 @@ All make commands are available in `package.json`.
 * Remove jQuery dependency (it is not necessary anymore)
 * Upgrade to minified Foundation 6+ (current CSS file is very large)
 * Use normalize.js from NPM (see mvtemp branch on github)
+* Explain what PPD is
+* Ultra-widescreen resolutions
 
 
 ## References
