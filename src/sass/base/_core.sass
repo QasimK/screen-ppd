@@ -16,20 +16,9 @@ body
     display: inline-block
     padding: 0.25em
 
-// Create a full solid border on foundation prefix and postfix spans
-span.fix
-    border-left-style: solid
-    border-left-width: 1px
-    border-right-style: solid
-    border-right-width: 1px
-
 // Stop page zooming on mobile
 input[type=number]
     font-size: 1em
-
-// Fix padding for "placeholder" text (fix normalize.css)
-input[type=number]
-    padding: 0 0.5rem
 
 // Hide radio buttons and use text button instead
 input[type=radio]
@@ -43,8 +32,17 @@ input[type=range]
 // Hide spinners
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button
-    -webkit-appearance: none
+//    -webkit-appearance: none
     margin: 0
 
-input[type=number]
-    -moz-appearance: textfield
+formset
+    border: solid 1px black
+
+
+// Create a full solid border for fake input-group-labels
+.input-group .label-fix
+    border: 1px solid #cacaca
+
+// Hacky fix for middle-aligning foundation label-buttons
+.input-group-button label.button
+    line-height: 2.1

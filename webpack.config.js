@@ -8,18 +8,27 @@ module.exports = {
     path: __dirname + '/dist',
     filename: '[name].js'
   },
+  resolve: {
+    alias: {
+      'jquery': 'jquery/dist/jquery.slim.min.js',
+    }
+  },
   module: {
     rules: [
       {
-        test: /\.(css|sass)$/,
+        test: /\.(css|sass|scss)$/,
         use: [
-          {
-            loader: 'style-loader'
-          },
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
               sourceMap: false
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [require('autoprefixer')]
             }
           },
           {
