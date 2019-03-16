@@ -8,160 +8,20 @@ const $ = require('jquery')
 const calc = require('pixels-per-degree')
 window.$ = $
 
+const componentDiagonal = require('./componentDiagonal')
+const componentResolution = require('./componentResolution')
+const componentDistance = require('./componentDistance')
+const componentScaling = require('./componentScaling')
+const componentRefreshRate = require('./componentRefreshRate')
+const componentHDR = require('./componentHDR')
+const componentCurvature = require('./componentCurvature')
+const utils = require('./utils')
+
 // Private
 var form
-var prevDistanceUnits
 
-function majorError (message) {
-    // Log a major error
-    window.alert(message)
-}
 
-function onDiagonalUnitsChange () {
-    var diagonalUnits = form.getSelectedDiagonalUnit().value
-
-    // Update diagonal length
-    var DSF
-    if (diagonalUnits === 'cm') {
-        DSF = 2.54
-    } else if (diagonalUnits === 'inches') {
-        DSF = 1 / 2.54
-    } else {
-        majorError("Unknown diagonal units: " + diagonalUnits)
-    }
-    var newLength = Math.round(DSF * parseInt(form.diagonalLength.val(), 10))
-    form.diagonalLength.val(newLength)
-
-    // Update text
-    if (diagonalUnits === 'cm') {
-        $('#monitor-size-units').text('cm')
-        $("label[for='ppu']").text('PPCM:')
-        $("label[for='scaled-ppu']").text('Scaled PPCM:')
-    } else {
-        $('#monitor-size-units').text('inches')
-        $("label[for='ppu']").text('PPI:')
-        $("label[for='scaled-ppu']").text('Scaled PPI:')
-    }
-
-    updateDiagonalButtons()
-}
-
-function onResolutionChange () {
-    const [newWidth, newHeight] = [form.resolutionWidth.value, form.resolutionHeight.value]
-
-    form.resolutionDropDown.value = ""
-    for (let option of form.resolutionDropDown.children) {
-        const [elementWidth, elementHeight] = option.value.split('x')
-        if (elementWidth == newWidth && elementHeight == newHeight) {
-            form.resolutionDropDown.value = option.value
-        }
-    }
-}
-
-function onResolutionDropDownChange () {
-    const [newWidth, newHeight] = form.resolutionDropDown.value.split('x')
-    if (newWidth != "" && newHeight != "") {
-        form.resolutionWidth.value = newWidth
-        form.resolutionHeight.value = newHeight
-        circuit()
-    }
-}
-
-function onDistanceUnitsChange () {
-    updateDistanceSlider()
-    updateDistanceButtons()
-    updateDistanceText()
-}
-
-function _selectButton (buttonsList, activeInput) {
-    var currentSelectedValue = activeInput.value
-    buttonsList.each(function () {
-        var correspondingInput = $('#' + $(this).attr('for'))
-        if (correspondingInput.val() === currentSelectedValue) {
-            $(this).removeClass('secondary')
-        } else {
-            $(this).addClass('secondary')
-        }
-    })
-}
-
-function updateDiagonalButtons () {
-    _selectButton(form.diagonalButtons, form.getSelectedDiagonalUnit())
-}
-
-function updateDistanceButtons () {
-    _selectButton(form.distanceButtons, form.getDistanceActiveUnit())
-}
-
-function updateScalingButtons () {
-    _selectButton(form.scalingButtons, form.getScalingActiveInput())
-}
-
-function updateDistanceSlider () {
-    var distanceUnits = form.getDistanceActiveUnit().val()
-    var DSF
-    if (prevDistanceUnits === 'inches' && distanceUnits === 'cm') {
-        DSF = 2.54
-    } else if (prevDistanceUnits === 'cm' && distanceUnits === 'inches') {
-        DSF = 0.393700
-    } else if (prevDistanceUnits === 'inches' && distanceUnits === 'feet') {
-        DSF = 0.083333 // 1 / 12
-    } else if (prevDistanceUnits === 'feet' && distanceUnits === 'inches') {
-        DSF = 12
-    } else if (prevDistanceUnits === 'inches' && distanceUnits === 'm') {
-        DSF = 0.0254 // 2.54 / 100
-    } else if (prevDistanceUnits === 'm' && distanceUnits === 'inches') {
-        DSF = 39.37
-    } else if (prevDistanceUnits === 'cm' && distanceUnits === 'feet') {
-        DSF = 0.032808 // 1 / 30.48
-    } else if (prevDistanceUnits === 'feet' && distanceUnits === 'cm') {
-        DSF = 30.48
-    } else if (prevDistanceUnits === 'cm' && distanceUnits === 'm') {
-        DSF = 0.01 // 1 / 100
-    } else if (prevDistanceUnits === 'm' && distanceUnits === 'cm') {
-        DSF = 100
-    } else if (prevDistanceUnits === 'feet' && distanceUnits === 'm') {
-        DSF = 0.3048 // 30.48 / 100
-    } else if (prevDistanceUnits === 'm' && distanceUnits === 'feet') {
-        DSF = 3.280839
-    } else if (prevDistanceUnits === distanceUnits) {
-        DSF = 1
-    } else {
-        majorError('Bug - unknown distance units')
-    }
-
-    var maxSize
-    var stepSize = 1
-    if (distanceUnits === 'inches') {
-        maxSize = 100
-    } else if (distanceUnits === 'cm') {
-        maxSize = 100
-    } else if (distanceUnits === 'feet') {
-        maxSize = 30
-    } else if (distanceUnits === 'm') {
-        maxSize = 10
-        stepSize = 0.1
-    }
-
-    prevDistanceUnits = distanceUnits
-
-    // Update diagonal length
-    var oldDistance = parseFloat(form.distance.val(), 10)
-    var newDistance = stepSize * Math.round(DSF * (1 / stepSize) * oldDistance)
-
-    form.distance.attr('max', maxSize).attr('step', stepSize).val(newDistance)
-}
-
-function updateDistanceText () {
-    form.distanceNumberText.val(form.distance.val())
-    var unitsText = form.getDistanceActiveUnit().val()
-    if (unitsText === 'inches') {
-        unitsText = "'"
-    }
-    form.distanceUnitsText.val(unitsText)
-}
-
-function getInput () {
+function getInput (form) {
     // Return input as metric measurements
     /* Example: Return {
         diagonalLength: 68.58, //27 inches in metric
@@ -170,29 +30,31 @@ function getInput () {
         distance: 101.6, //40 inches in metric
         scaling: 2 //200% scaling
     } */
-    var diagonalUnits = form.getSelectedDiagonalUnit().value
+    var diagonalUnits = form.getSelectedDiagonalUnit()
     var DSF = 1 // Assume cm
     if (diagonalUnits === 'inches') {
         DSF = 2.54
     }
 
-    var distanceUnits = form.getDistanceActiveUnit().val()
-    var diagSF = 1 // Assume cm
-    if (distanceUnits === 'inches') {
+    var distanceUnits = form.getDistanceUnits()
+    var diagSF
+    if (distanceUnits === 'cm') {
+        diagSF = 1
+    } else if (distanceUnits === 'inches') {
         diagSF = 2.54
     } else if (distanceUnits === 'feet') {
         diagSF = 30.48
-    } else if (distanceUnits === 'm') {
+    } else if (distanceUnits === 'metres') {
         diagSF = 100
+    } else {
+        window.alert("Unknown distance units - getInput()")
     }
 
-    var diagonalLength = parseFloat(form.diagonalLength.val())
+    var diagonalLength = parseFloat(form.diagonalBox.value)
     var resW = parseInt(form.resolutionWidth.value, 10)
     var resH = parseInt(form.resolutionHeight.value, 10)
-    var distance = parseFloat(form.distance.val(), 10)
-
-    var scaling = form.getScalingActiveInput().val()
-    scaling = parseInt(scaling, 10) / 100
+    var distance = parseFloat(form.distanceBox.value, 10)
+    var scaling = parseInt(form.scalingBox.value, 10) / 100
 
     return {
         diagonalLength: DSF * diagonalLength,
@@ -203,9 +65,9 @@ function getInput () {
     }
 }
 
-function setOutput (calcs) {
+function setOutput (form, calcs) {
     // Set output in the appropriate units (takes in calcs from getCalculations)
-    var diagonalUnits = form.getSelectedDiagonalUnit().value
+    var diagonalUnits = form.getSelectedDiagonalUnit()
     var DSF = 1 // Assume CM
     if (diagonalUnits === 'inches') {
         DSF = 1 / 2.54
@@ -233,8 +95,9 @@ function setOutput (calcs) {
     $('#scaled-resolution').text(scaledResolution)
 }
 
-function circuit () {
-    setOutput(calc.ppdCalc(getInput()))
+function circuit (form) {
+    console.debug('Doing full circuit.')
+    setOutput(form, calc.ppdCalc(getInput(form)))
 }
 
 // Public
@@ -243,53 +106,55 @@ function circuit () {
 function initialise () {
     form = {
         // Diagonal Size
-        diagonalLength: $('#diagonal-size'),
-        diagonalUnitChoices: document.querySelectorAll("input[name='diagonal-units']"),
-        getSelectedDiagonalUnit: function() { return document.querySelector("input[name='diagonal-units']:checked") },
-        diagonalButtons: $("label[for^='diagonal-units-']"),
+        diagonalBox: document.getElementById('diagonal-box'),
+        diagonalUnitButtonInputs: document.querySelectorAll("input[name='diagonal-units']"),
+        getSelectedDiagonalUnit: function() { return document.querySelector("input[name='diagonal-units']:checked").value },
+
         // Resolution
         resolutionWidth: document.getElementById('resolution-width'),
         resolutionHeight: document.getElementById('resolution-height'),
         resolutionDropDown: document.getElementById('resolution-preselect'),
         getResolutionDropDownSelected: function() { return document.querySelector('#resolution-preselect option:checked') },
-        // TODO: Distance to eyes
-        // Sync Box with Slider
-        // Sync Dropdown with units selection
-        distance: $('#distance'),
-        distanceNumberText: $('#distance-value'),
-        distanceUnitsText: $('#distance-units-text'),
-        distanceUnits: $("input[type='radio'][name='distance-units']"),
-        getDistanceActiveUnit: function () { return $("input[type='radio'][name='distance-units']:checked") },
-        distanceButtons: $("label[for^='distance-units-']"),
-        // TODO: DPI Scaling
-        scalingInputs: $("input[type='radio'][name='scaling']"),
-        getScalingActiveInput: function () { return $("input[type='radio'][name='scaling']:checked") },
-        scalingButtons: $("label[for^='scale-']")
-        // TODO: Refresh Rate
-        // TODO: Bit-rate
-        // TODO: Curvature
+
+        // Distance to Eyes
+        distanceBox: document.getElementById('distance-box'),
+        distanceSlider: document.getElementById('distance-slider'),
+        distanceUnitsDropDown: document.getElementById('distance-units-drop-down'),
+        getDistanceUnits: function() { return document.querySelector('#distance-units-drop-down option:checked').value },
+
+        // DPI Scaling
+        scalingBox: document.getElementById('scaling-box'),
+        scalingButtonInputs: document.querySelectorAll("input[name='scaling-buttons']"),
+        scalingButtonLabels: document.querySelectorAll("label[for^='scale-']"),
+
+        // Refresh Rate (TODO: Output based on refresh rate)
+        refreshRateBox: document.getElementById('refresh-rate-box'),
+        refreshRateButtonInputs: document.querySelectorAll("input[name='refresh-rate']"),
+        refreshRateButtonLabels: document.querySelectorAll("label[for^='refresh-rate-']"),
+
+        // HDR Bit Depth (TODO: Output based on HDR)
+        hdrBox: document.getElementById('hdr-box'),
+        hdrButtonInputs: document.querySelectorAll("input[name='hdr-bit']"),
+        hdrButtonLabels: document.querySelectorAll("label[for^='hdr-bit-']"),
+
+        // Curvature (TODO: Output based on curvature)
+        curvatureBox: document.getElementById('curvature-box'),
+        curvatureUnitButtonInputs: document.querySelectorAll("input[name='curvature-units']"),
+        curvatureUnitButtonLabels: document.querySelectorAll("label[for^='curvature-units-']"),
     }
+    form.doCircuit = function() { circuit(form) }
     // Debug helper:
     window.form = form
 
-    prevDistanceUnits = form.getDistanceActiveUnit().val()
+    componentDiagonal.initialise(form)
+    componentResolution.initialise(form)
+    componentDistance.initialise(form)
+    componentScaling.initialise(form)
+    componentRefreshRate.initialise(form)
+    componentHDR.initialise(form)
+    componentCurvature.initialise(form)
 
-    updateDiagonalButtons()
-    updateDistanceButtons()
-    updateScalingButtons()
-    updateDistanceText()
-    updateDistanceSlider()
-    circuit() // Calculate PPD (may already be input on the form)
 
-    for (let element of form.diagonalUnitChoices) {
-        element.addEventListener("change", onDiagonalUnitsChange)
-    }
-    form.resolutionWidth.addEventListener("change", onResolutionChange)
-    form.resolutionHeight.addEventListener("change", onResolutionChange)
-    form.resolutionDropDown.addEventListener("change", onResolutionDropDownChange)
-    form.distanceUnits.change(onDistanceUnitsChange)
-    form.scalingInputs.change(updateScalingButtons)
-    form.distance.on('input', updateDistanceText) // Update as mouse dragged
-    form.distance.on('input', circuit) // Do a complete calculation
-    $('.userin').change(circuit) // Any change on a user-input form element
+    // Calculate PPD (there may already be input on the form)
+    form.doCircuit()
 }
