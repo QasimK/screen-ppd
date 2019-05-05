@@ -31,8 +31,8 @@ echo "We can start the release process!"
 echo "Starting Release..."
 echo ""
 
-MESSAGE="Release from $(git rev-parse HEAD)" \
-&& git subtree split --prefix dist -b gh-pages -m "$MESSAGE" \
+# Replace origin/gh-pages with a new branch containing only commits of dist/
+git subtree split --prefix dist -b gh-pages \
 && git push -f origin gh-pages:gh-pages \
 && git branch -D gh-pages \
 && echo "" \
