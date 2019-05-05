@@ -82,7 +82,7 @@ function updateDistanceValues () {
 
     // New distance values
     var stepSize = form.distanceSlider.step
-    var newDistance = Math.ceil(1, stepSize * Math.round(DSF * (1 / stepSize) * oldDistance))
+    var newDistance = Math.max(1, stepSize * Math.round(DSF * (1 / stepSize) * oldDistance))
     form.distanceBox.value = newDistance
     form.distanceSlider.value = newDistance
 
