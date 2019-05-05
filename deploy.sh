@@ -33,6 +33,7 @@ echo ""
 
 MESSAGE="Release from $(git rev-parse HEAD)" \
 && git subtree split --prefix dist -b gh-pages -m "$MESSAGE" \
-&& git push origin gh-pages:gh-pages \
+&& git push -f origin gh-pages:gh-pages \
+&& git branch -D gh-pages \
 && echo "" \
 && echo "...Completed Release."
