@@ -25,9 +25,12 @@ if [[ -n $(git status -s) ]]; then
 fi
 
 echo "We can start the release process!"
-echo "Starting Release...\n"
+echo "Starting Release..."
+echo ""
 
 MESSAGE="Release from $(git rev-parse HEAD)" \
 && npm run build \
 && git subtree split --prefix dist -b gh-pages -m "$MESSAGE" \
 && git push origin gh-pages:gh-pages
+&& echo ""
+&& echo "...Completed Release."
