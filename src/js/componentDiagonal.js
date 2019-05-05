@@ -40,6 +40,7 @@ function onDiagonalUnitsChange () {
     form.diagonalBox.value = newLength
 
     setDiagonalUnitsOnly()
+    form.doCircuit()
 }
 
 

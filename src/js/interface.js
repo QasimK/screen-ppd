@@ -4,9 +4,7 @@ module.exports = {
     initialise: initialise
 }
 
-const $ = require('jquery')
 const calc = require('pixels-per-degree')
-window.$ = $
 
 const componentDiagonal = require('./componentDiagonal')
 const componentResolution = require('./componentResolution')
@@ -17,7 +15,6 @@ const componentHDR = require('./componentHDR')
 const componentCurvature = require('./componentCurvature')
 const utils = require('./utils')
 
-
 function getInput (form) {
     // Return input as metric measurements
     /* Example: Return {
@@ -27,13 +24,10 @@ function getInput (form) {
         distance: 101.6, //40 inches in metric
         scaling: 2 //200% scaling
     } */
-    var diagonalUnits = form.getSelectedDiagonalUnit()
-    var DSF = 1 // Assume cm
-    if (diagonalUnits === 'inches') {
-        DSF = 2.54
-    }
+    const diagonalUnits = form.getSelectedDiagonalUnit()
+    const DSF =  (diagonalUnits === 'inches') ? 2.54 : 1
 
-    var distanceUnits = form.getDistanceUnits()
+    const distanceUnits = form.getDistanceUnits()
     var diagSF
     if (distanceUnits === 'cm') {
         diagSF = 1
@@ -47,49 +41,51 @@ function getInput (form) {
         window.alert("Unknown distance units - getInput()")
     }
 
-    var diagonalLength = parseFloat(form.diagonalBox.value)
-    var resW = parseInt(form.resolutionWidth.value, 10)
-    var resH = parseInt(form.resolutionHeight.value, 10)
-    var distance = parseFloat(form.distanceBox.value, 10)
-    var scaling = parseInt(form.scalingBox.value, 10) / 100
+    const diagonalLength = parseFloat(form.diagonalBox.value)
+    const resolutionWidth = parseInt(form.resolutionWidth.value, 10)
+    const resolutionHeight = parseInt(form.resolutionHeight.value, 10)
+    const distance = parseFloat(form.distanceBox.value, 10)
+    const scaling = parseInt(form.scalingBox.value, 10) / 100
+    const refreshRate = parseInt(form.refreshRateBox.value, 10)
+    const colorDepth = parseInt(form.hdrBox.value, 10)
+    // Curvature is not used yet
 
     return {
         diagonalLength: DSF * diagonalLength,
-        resW: resW,
-        resH: resH,
+        resolutionWidth,
+        resolutionHeight,
         distance: diagSF * distance,
-        scaling: scaling
+        scaling,
+        refreshRate,
+        colorDepth,
     }
 }
 
 function setOutput (form, calcs) {
     // Set output in the appropriate units (takes in calcs from getCalculations)
-    var diagonalUnits = form.getSelectedDiagonalUnit()
-    var DSF = 1 // Assume CM
-    if (diagonalUnits === 'inches') {
-        DSF = 1 / 2.54
-    }
+    const diagonalUnits = form.getSelectedDiagonalUnit()
+    const DSF =  (diagonalUnits === 'inches') ? 2.54 : 1
 
-    var PPD = Math.round(calcs.PPD)
-    var scaledPPD = Math.round(calcs.scaledPPD)
-    var horizontalFOV = Math.round(calcs.horizontalFOV)
-    var aspectRatio = calcs.aspectRatioW + ':' + calcs.aspectRatioH + ' (' +
+    const PPD = Math.round(calcs.PPD)
+    const scaledPPD = Math.round(calcs.scaledPPD)
+    const horizontalFOV = Math.round(calcs.horizontalFOV)
+    const aspectRatio = calcs.aspectRatioW + ':' + calcs.aspectRatioH + ' (' +
                                         Math.round(calcs.aspectRatio * 1000) / 1000 + ')'
-    var monitorSize = Math.round(DSF * calcs.lengthW * 10) / 10 + ' by ' +
-                                            Math.round(DSF * calcs.lengthH * 10) / 10
-    var PPU = Math.round((1 / DSF) * calcs.PPCM)
-    var scaledPPU = Math.round((1 / DSF) * calcs.scaledPPCM)
-    var scaledResolution = Math.round(calcs.scaledResW) + ' x ' +
-                                                    Math.round(calcs.scaledResH)
+    const monitorSize = Math.round(( 1/ DSF) * calcs.lengthW * 10) / 10 + ' by ' +
+                                            Math.round((1 / DSF) * calcs.lengthH * 10) / 10
+    const PPU = Math.round(DSF * calcs.PPCM)
+    const scaledPPU = Math.round(DSF * calcs.scaledPPCM)
+    const scaledResolution = Math.round(calcs.scaledResolutionWidth) + ' x ' +
+                                                    Math.round(calcs.scaledResolutionHeight)
 
-    $('#ppd').text(PPD)
-    $('#ppd-scaled').text(scaledPPD)
-    $('#horizontal-fov').text(horizontalFOV)
-    $('#aspect-ratio').text(aspectRatio)
-    $('#monitor-size').text(monitorSize)
-    $('#ppu').text(PPU)
-    $('#scaled-ppu').text(scaledPPU)
-    $('#scaled-resolution').text(scaledResolution)
+    form.ppdOutput.value = PPD
+    form.ppdScaledOutput.value = scaledPPD
+    form.horizontalFovOutput.value = horizontalFOV
+    form.aspectRatioOutput.value = aspectRatio
+    form.monitorSizeOutput.value = monitorSize
+    form.ppuOutput.value = PPU
+    form.scaledPpuOutput.value = scaledPPU
+    form.scaledResolutionOutput.value = scaledResolution
 }
 
 function circuit (form) {
@@ -138,6 +134,16 @@ function initialise () {
         curvatureBox: document.getElementById('curvature-box'),
         curvatureUnitButtonInputs: document.querySelectorAll("input[name='curvature-units']"),
         curvatureUnitButtonLabels: document.querySelectorAll("label[for^='curvature-units-']"),
+
+        // Output texts
+        ppdOutput: document.getElementById('ppd'),
+        ppdScaledOutput: document.getElementById('ppd-scaled'),
+        horizontalFovOutput: document.getElementById('horizontal-fov'),
+        aspectRatioOutput: document.getElementById('aspect-ratio'),
+        monitorSizeOutput: document.getElementById('monitor-size'),
+        ppuOutput: document.getElementById('ppu'),
+        scaledPpuOutput: document.getElementById('scaled-ppu'),
+        scaledResolutionOutput: document.getElementById('scaled-resolution'),
     }
     form.doCircuit = function() { circuit(form) }
 
