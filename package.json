@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "standard --verbose ./src/js/**/*.js | snazzy",
     "lint-fix": "standard --fix ./src/js/**/*.js",
-    "start": "webpack-dev-server --mode development --content-base ./dist/ --open",
+    "start": "webpack-dev-server --mode development --content-base ./dev/ --open",
     "build": "webpack -p --mode production",
     "build:dev": "webpack -d --mode development",
     "watch:dev": "webpack -d --mode development --watch"
