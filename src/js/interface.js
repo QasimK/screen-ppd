@@ -17,9 +17,6 @@ const componentHDR = require('./componentHDR')
 const componentCurvature = require('./componentCurvature')
 const utils = require('./utils')
 
-// Private
-var form
-
 
 function getInput (form) {
     // Return input as metric measurements
@@ -104,7 +101,7 @@ function circuit (form) {
 // Note: you can move the functions into the update...Buttons function
 // and create a static property
 function initialise () {
-    form = {
+    window.form = form = {
         // Diagonal Size
         diagonalBox: document.getElementById('diagonal-box'),
         diagonalUnitButtonInputs: document.querySelectorAll("input[name='diagonal-units']"),
@@ -143,8 +140,6 @@ function initialise () {
         curvatureUnitButtonLabels: document.querySelectorAll("label[for^='curvature-units-']"),
     }
     form.doCircuit = function() { circuit(form) }
-    // Debug helper:
-    window.form = form
 
     componentDiagonal.initialise(form)
     componentResolution.initialise(form)
@@ -153,7 +148,6 @@ function initialise () {
     componentRefreshRate.initialise(form)
     componentHDR.initialise(form)
     componentCurvature.initialise(form)
-
 
     // Calculate PPD (there may already be input on the form)
     form.doCircuit()
