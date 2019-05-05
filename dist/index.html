@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Screen PPD Calculator</title>
+
+<body class="grid-container">
+  <p></p>
+  <h1>Pixels Per Degree</h1>
+  <p>
+    Use a screen's size and resolution combined with your viewing distance
+    (from your eyes to the screen) to calculate the Pixels Per Degree (PPD).
+  </p>
+  <noscript>
+    <h2>Javascript is Required.</h2>
+  </noscript>
+
+  <form class="grid-x grid-margin-x" id="ppd-calculator">
+    <fieldset class="fieldset cell small-12 medium-7 large-6">
+      <legend>Enter Screen Information</legend>
+
+      <div class="grid-x">
+        <div class="cell small-11 medium-11 large-8">
+          <div class="input-group">
+            <label class="input-group-label align-right" for="diagonal-box">Size</label>
+            <input class="input-group-field userin"
+                   id="diagonal-box"
+                   name="diagonal-box"
+                   type="number"
+                   value="27"
+                   min="1"
+                   required autofocus/>
+
+            <input name="diagonal-units"
+                   id="diagonal-units-inches"
+                   class="userin input-group-field"
+                   type="radio"
+                   value="inches"
+                   checked/>
+            <input name="diagonal-units"
+                   id="diagonal-units-cm"
+                   class="userin input-group-field"
+                   type="radio"
+                   value="cm"/>
+
+            <div class="input-group-button">
+              <label for="diagonal-units-inches" class="button">inches</label><!--
+           --><label for="diagonal-units-cm"     class="button secondary">cm</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-x">
+        <div class="cell small-12 medium-12 large-7">
+          <div class="input-group">
+            <label class="input-group-label align-right" for="resolution-width">Resolution</label>
+            <input class="input-group-field"
+                   id="resolution-width" name="resolution-width"
+              type="number" value="1920" min="1" step="1"
+              placeholder="Width" required/>
+            <input id="resolution-height" name="resolution-height" class="userin input-group-field"
+              type="number" value="1080" min="1" step="1"
+              placeholder="Height" required/>
+          </div>
+        </div>
+        <div class="cell small-5 medium-5 large-shrink">
+        </div>
+        <div class="cell small-7 medium-7 large-5">
+          <div class="input-group">
+            <label class="input-group-label" for="resolution-preselect">&gt;</label>
+            <select class="input-group-field" id="resolution-preselect">
+              <option></option>
+              <option value="1920x1080" selected>FHD (1080p) </option>
+              <option value="2560x1080">UW-FHD</option>
+              <option value="2560x1440">QHD (1440p)</option>
+              <option value="3440x1440">UW-QHD</option>
+              <option value="3840x1080">2xFHD</option>
+              <option value="5120x1440">2xQHD</option>
+              <option value="3840x2160">4K UHD</option>
+              <option value="4096x2160">DCI 4K</option>
+              <option value="5120x2160">UW-4K</option>
+              <option value="5120x2880">5K</option>
+              <option value="7680x4320">8K UHD</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-x">
+        <div class="cell small-12 medium-12 large-7">
+          <div class="input-group">
+            <label class="input-group-label align-right" for="distance-box">Distance</label>
+            <input class="input-group-field" id="distance-box" name="distance-box"
+                   type="number" value="25", min="1" max="120" step="1"
+                   required />
+            <select class="input-group-field" id="distance-units-drop-down">
+              <option>cm</option>
+              <option>inches</option>
+              <option>metres</option>
+              <option>feet</option>
+            </select>
+          </div>
+        </div>
+        <div class="cell small-12">
+          <input class="input-group-field"
+                 id="distance-slider" name="distance-slider" class="userin rangein"
+                 style="margin: -0.5em 0em 1em 0em"
+                 type="range" value="25" min="1" max="120"/>
+        </div>
+      </div>
+
+      <div class="grid-x input-group">
+        <label class="cell small-3 large-2 input-group-label align-center" for="scaling-box">
+          Scaling
+        </label>
+        <input class="cell small-3 large-2 input-group-field" id="scaling-box" name="scaling-box"
+               type="number" value="100" min="10" max="500" step="5"
+        >
+        <input name="scaling-buttons" id="scale-100" class="userin" type="radio" value="100" checked/>
+        <input name="scaling-buttons" id="scale-125" class="userin" type="radio" value="125"/>
+        <input name="scaling-buttons" id="scale-150" class="userin" type="radio" value="150"/>
+        <input name="scaling-buttons" id="scale-200" class="userin" type="radio" value="200"/>
+        <div class="cell small-12 large-8 input-group-button medium-align-center">
+          <label for="scale-100" class="button">100%</label><!--
+       --><label for="scale-125" class="button secondary">125%</label><!--
+       --><label for="scale-150" class="button secondary">150%</label><!--
+       --><label for="scale-200" class="button secondary">200%</label>
+        </div>
+      </div>
+
+      <div class="grid-x">
+        <div class="cell small-12 medium-12 large-8 input-group">
+          <label class="input-group-label" for="refresh-rate-box">Hz</label>
+          <input class="input-group-field"
+                 id="refresh-rate-box" name="refresh-rate-box"
+                 type="number" value="60" min="1" step="1"
+                 placeholder="Hz" required/>
+
+          <input class="userin input-group-field"
+                 name="refresh-rate" id="refresh-rate-30"
+                 type="radio" value="30"
+                 checked
+          />
+          <input class="userin input-group-field"
+                 name="refresh-rate" id="refresh-rate-60"
+                 type="radio" value="60"
+          />
+          <input class="userin input-group-field"
+                 name="refresh-rate" id="refresh-rate-120"
+                 type="radio" value="120"
+          />
+          <div class="expanded input-group-button">
+            <label for="refresh-rate-30"  class="button">30</label><!--
+         --><label for="refresh-rate-60"  class="button secondary">60</label><!--
+         --><label for="refresh-rate-120" class="button secondary">120</label><!--
+      --></div>
+        </div>
+
+        <div class="cell small-12 medium-12 large-8 input-group">
+          <label class="input-group-label" for="hdr-box">HDR</label>
+          <input class="input-group-field"
+                 id="hdr-box" name="hdr-box"
+                 type="number" value="8" min="1" step="1"
+                 placeholder="HDR" required/>
+
+          <input class="userin input-group-field"
+                 name="hdr-bit" id="hdr-bit-8"
+                 type="radio" value="8"
+                 checked
+          />
+          <input class="userin input-group-field"
+                 name="hdr-bit" id="hdr-bit-10"
+                 type="radio" value="10"
+          />
+          <div class="expanded input-group-button">
+            <label for="hdr-bit-8"   class="button">8-bit</label><!--
+         --><label for="hdr-bit-10"  class="button secondary">10-bit</label><!--
+      --></div>
+        </div>
+
+        <div class="cell small-12 medium-12 large-9 input-group">
+          <label class="input-group-label" for="curvature-box">Curvature</label>
+          <input class="input-group-field"
+                 id="curvature-box" name="curvature-box"
+                 type="number" value="" min="0" step="100"
+                 placeholder="Curvature"
+          />
+
+          <input class="userin input-group-field"
+                 name="curvature-units" id="curvature-units-mm"
+                 type="radio" value="mm"
+          />
+          <input class="userin input-group-field"
+                 name="curvature-units" id="curvature-units-flat"
+                 type="radio" value="flat"
+                 checked
+          />
+          <div class="expanded input-group-button">
+            <label for="curvature-units-mm" class="button secondary">mm</label><!--
+         --><label for="curvature-units-flat"   class="button">Flat</label><!--
+      --></div>
+        </div>
+
+      </div>
+
+    </fieldset>
+
+    <fieldset class="fieldset cell small-12 medium-5 large-6">
+      <legend>Pixels Per Degree of Vision</legend>
+        <div class="grid-x">
+          <div class="cell small-12">
+            <meter id="ppd-meter" name="ppd-meter"
+                   min="0" max="80" value="79"
+                   low="40" high="59" optimum="60"
+                   style="width: 100%" form="ppd">
+              PPD:
+            </meter>
+          </div>
+
+          <div class="cell small-12">
+            <p class="ppd">
+              <label for="ppd" style="display: none; visibility: hidden;">PPD</label>
+              <output name="ppd" id="ppd">-</output>
+            </p>
+          </div>
+          <div class="cell small-12">&nbsp;</div>
+          <div class="cell small-12 large-6">
+            <p>
+              <label for="horizontal-fov">
+                <a href="https://en.wikipedia.org/wiki/Field_of_view_in_video_games">
+                  Horizontal FOV
+                </a>
+              </label>
+              <output name="horizontal-fov" id="horizontal-fov">-</output>&#176;
+            </p>
+          </div>
+          <div class="cell small-12 large-6">
+            <p>
+              <label for="ppd-scaled">Scaled PPD</label>
+              <output name="ppd-scaled" id="ppd-scaled">-</output>
+            </p>
+          </div>
+          <div class="cell small-12 large-6">
+            <p>
+              <label for="ppd-edge">PPD at the edge of the screen</label>
+              <output name="ppd-edge" id="ppd-edge">-</output>
+            </p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="additional-info" class="fieldset cell small-12">
+      <legend>Additional Information</legend>
+      <div class="grid-x">
+        <p class="cell small-12 medium-4 large-2">
+          <label for="aspect-ratio">
+            <a href="https://en.wikipedia.org/wiki/Display_aspect_ratio">
+              Aspect ratio
+            </a>
+          </label>
+          <output name="aspect-ratio" id="aspect-ratio">-</output>
+        </p>
+        <p class="cell small-12 medium-4 large-2">
+          <label for="ppu">
+            <a href="https://en.wikipedia.org/wiki/Pixel_density">
+              PPI
+            </a>
+          </label>
+          <output name="ppu" id="ppu">-</output>
+        </p>
+        <p class="cell small-12 medium-4 large-2">
+          <label for="scaled-ppu">Scaled PPI</label>
+          <output name="scaled-ppu" id="scaled-ppu">-</output>
+        </p>
+        <p class="cell small-12 medium-4 large-2">
+          <label for="monitor-size">Screen Dimensions</label>
+          <output name="monitor-size" id="monitor-size">-</output>
+          <span id="monitor-size-units" class="units-text">inches</span>
+        </p>
+        <p class="cell small-12 medium-4 large-2 end">
+          <label for="scaled-resolution">Scaled Resolution</label>
+          <output name="scaled-resolution" id="scaled-resolution">-</output>
+        </p>
+        <!--<p class="cell small-12 medium-4 large-2 end">
+          <label for="scaled-resolution">Bandwidth Required</label>
+          <output name="scaled-resolution" id="bandwidth-required">Bandwidth</output>
+        </p>-->
+        <!--<p class="cell small-12 medium-4 large-2 end">
+          <label for="scaled-resolution">Interface Required</label>
+          <output name="scaled-resolution" id="bandwidth-required">DP1.4+, HDMI 2.0</output>
+          (Note VBLANK) (Note DSC)
+        </p>-->
+      </div>
+    </fieldset>
+
+  </form>
+
+<script type="text/javascript" src="main.js?ff923dc445bec22201f1"></script></body>
