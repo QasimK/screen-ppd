@@ -31,6 +31,6 @@ echo ""
 MESSAGE="Release from $(git rev-parse HEAD)" \
 && npm run build \
 && git subtree split --prefix dist -b gh-pages -m "$MESSAGE" \
-&& git push origin gh-pages:gh-pages
-&& echo ""
+&& git push origin gh-pages:gh-pages \
+&& echo "" \
 && echo "...Completed Release."
