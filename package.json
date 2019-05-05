@@ -13,8 +13,7 @@
     "start": "webpack-dev-server --mode development --content-base ./dist/ --open",
     "build": "webpack -p --mode production",
     "build:dev": "webpack -d --mode development",
-    "watch:dev": "webpack -d --mode development --watch",
-    "deploy": "git checkout origin/master && git subtree split --prefix dist -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages && git checkout -"
+    "watch:dev": "webpack -d --mode development --watch"
   },
   "devDependencies": {
     "autoprefixer": "^9.4.5",

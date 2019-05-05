@@ -25,10 +25,7 @@ Development:
 
 Deployment (<https://qasimk.github.io/screen-ppd/>):
 
-    $ npm run build
-
-    # Warning: the following will deploy the `dist/` folder of `origin/master`
-    $ npm run deploy
+    $ ./deploy.sh
 
 All make commands are available in `package.json`.
 
