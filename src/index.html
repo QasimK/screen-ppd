@@ -298,4 +298,24 @@
 
   </form>
 
+  <section>
+    <h2>Notes</h2>
+    <p>
+      Colour Depth = 8-bit, 10-bit, 12-bit.
+      This allows for decreased banding when showing higher brightness images.
+      You can map 8-bit to 1000 Nits Brightness.
+      Mapping 10-bit to 1000 Nits Brightness makes much more sense.
+      The OS and application must explicitly support HDR.
+      Remember, colour gamut is different to colour depth.
+    </p>
+    <p>
+      The refresh rate, input lag, and pixel response time are all linked.
+      A better pixel response time will reduce motion blur.
+      Better input lag (signal processing + pixel response time) will improve the perceived responsiveness (+ improve accuracy of input tasks like typing and mouse movement)
+      High refresh rate will give a better experience.
+      Variable Refresh Rates may be helpful (see video by battlenonsense) for tear-free + lower input lag.
+      Tear-free is accomplished by VRR, Vertical Sync (Double-buffer), and Vertical Sync (Triple-buffer - two interpretations).
+      An alternative to high, variable refresh rate for motion blur reduction is black-frame insertion, which is more like a CRT.
+      The OS and application must explicitly support VRR.
+    </p>
 </body>
